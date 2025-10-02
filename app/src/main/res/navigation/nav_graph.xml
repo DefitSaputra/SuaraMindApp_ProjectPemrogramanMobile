@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <!-- Home Fragment -->
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.suarasamind.app.fragments.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home">
+        <!-- Aksi untuk berpindah dari Home ke Forum -->
+        <action
+            android:id="@+id/action_homeFragment_to_forumFragment"
+            app:destination="@id/forumFragment" />
+    </fragment>
+
+    <!-- Forum Fragment -->
+    <fragment
+        android:id="@+id/forumFragment"
+        android:name="com.example.suarasamind.app.fragments.ForumFragment"
+        android:label="Forum"
+        tools:layout="@layout/fragment_forum">
+        <!-- Aksi untuk berpindah dari Forum ke Home -->
+        <action
+            android:id="@+id/action_forumFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+
+    <!-- Journal Fragment -->
+    <fragment
+        android:id="@+id/journalFragment"
+        android:name="com.example.suarasamind.app.fragments.JournalFragment"
+        android:label="Journal"
+        tools:layout="@layout/fragment_journal">
+        <!-- Aksi untuk berpindah dari Journal ke Home -->
+        <action
+            android:id="@+id/action_journalFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+
+    <!-- Profile Fragment -->
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.suarasamind.app.fragments.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile">
+        <!-- Aksi untuk berpindah dari Profile ke Home -->
+        <action
+            android:id="@+id/action_profileFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+
+</navigation>

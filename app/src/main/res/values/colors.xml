@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand Colors -->
+    <color name="calm_blue">#62a9a5</color>
+    <color name="fresh_green">#a5c882</color>
+    <color name="accent_warm_yellow">#FFC947</color>
+    <color name="accent_soft_red">#E57373</color> <!-- WARNA BARU UNTUK MARAH -->
+
+    <!-- Text Colors -->
+    <color name="text_dark">#4d5057</color>
+    <color name="text_light">#888888</color>
+    <color name="text_super_light">#E0E0E0</color>
+
+    <!-- Neutral & Background Colors -->
+    <color name="background_light">#F7F7F7</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="card_background">#FFFFFF</color>
+
+    <!-- WARNA BARU UNTUK MOOD TRACKER (SESUAI PERMINTAAN) -->
+    <!-- Senang = Kuning -->
+    <color name="mood_happy_border">#FFC947</color>
+    <color name="mood_happy_bg">#33FFC947</color> <!-- Kuning dengan Transparansi -->
+    <!-- Datar = Hijau -->
+    <color name="mood_flat_border">#a5c882</color>
+    <color name="mood_flat_bg">#33a5c882</color> <!-- Hijau dengan Transparansi -->
+    <!-- Sedih = Biru -->
+    <color name="mood_sad_border">#62a9a5</color>
+    <color name="mood_sad_bg">#3362a9a5</color> <!-- Biru dengan Transparansi -->
+    <!-- Marah = Merah -->
+    <color name="mood_angry_border">#E57373</color>
+    <color name="mood_angry_bg">#33E57373</color> <!-- Merah lembut dengan Transparansi -->
+</resources>
+

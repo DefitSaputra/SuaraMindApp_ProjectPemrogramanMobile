@@ -1,0 +1,59 @@
+<resources>
+    <!-- General -->
+    <string name="app_name">Suarasa Mind</string>
+    <string name="illustration_content_description">Ilustrasi</string>
+    <string name="logo_content_desc">Logo Suarasa Mind</string>
+
+    <!-- Onboarding Texts (Jika ingin digunakan di masa depan) -->
+    <string name="onboarding_title_1">Selamat Datang di Suarasa Mind</string>
+    <string name="onboarding_desc_1">Perjalanan kesehatan mental Anda dimulai di sini.</string>
+    <string name="onboarding_title_2">Lacak Kemajuan Anda</string>
+    <string name="onboarding_desc_2">Lacak pertumbuhan Anda bersama kami sepanjang perjalanan.</string>
+    <string name="onboarding_title_3">Komunitas yang Mendukung</string>
+    <string name="onboarding_desc_3">Anda tidak sendirian. Temukan teman dan dukungan di sini.</string>
+
+    <!-- Buttons -->
+    <string name="btn_login">Login</string>
+    <string name="btn_register">Register</string>
+    <string name="btn_logout">Logout</string>
+    <string name="btn_create_account">Buat Akun</string>
+    <string name="btn_login_main">Masuk ke Suarasa Mind</string>
+
+    <!-- Login Screen -->
+    <string name="login_title">Selamat Datang Kembali</string>
+    <string name="login_subtitle">Silakan login untuk melanjutkan perjalananmu.</string>
+    <string name="login_email_hint">Email atau Username</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_forgot_password">Lupa Password?</string>
+    <string name="login_no_account">Belum punya akun? </string>
+    <string name="login_register_now">Daftar sekarang</string>
+
+    <!-- Register Screen -->
+    <string name="register_title">Bergabung dengan Suarasa Mind</string>
+    <string name="register_subtitle">Buat akun barumu dalam beberapa langkah mudah.</string>
+    <string name="register_fullname_hint">Nama Lengkap</string>
+    <string name="register_email_hint">Email</string>
+    <string name="register_username_hint">Username</string>
+    <string name="register_password_hint">Password</string>
+    <string name="register_confirm_password_hint">Konfirmasi Password</string>
+    <string name="register_has_account">Sudah punya akun? </string>
+    <string name="register_login_now">Login di sini</string>
+
+    <!-- Bottom Navigation Titles -->
+    <string name="title_home">Beranda</string>
+    <string name="title_forum">Forum</string>
+    <string name="title_journal">Jurnal</string>
+    <string name="title_profile">Profil</string>
+
+    <!-- Home Screen -->
+    <string name="home_greeting_morning">Selamat pagi,</string>
+    <string name="home_greeting_afternoon">Selamat siang,</string>
+    <string name="home_greeting_evening">Selamat malam,</string>
+    <string name="home_mood_check">Bagaimana perasaanmu hari ini?</string>
+    <string name="home_for_you_title">Untukmu Hari Ini</string>
+    <string name="home_forum_title">Diskusi Hangat di Forum</string>
+    <string name="home_welcome_default">Selamat datang, Sobat!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
