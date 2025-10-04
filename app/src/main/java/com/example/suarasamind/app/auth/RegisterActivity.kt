@@ -1,9 +1,10 @@
-package com.example.suarasamind.app
+package com.example.suarasamind.app.auth
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.suarasamind.app.auth.LoginActivity
 import com.example.suarasamind.app.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -96,4 +97,3 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 }
-

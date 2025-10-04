@@ -5,14 +5,14 @@
     style="@style/Widget.Suarasa.ContentCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
-    app:cardBackgroundColor="@color/card_background">
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="20dp">
 
         <TextView
             android:id="@+id/tv_post_title"
@@ -22,6 +22,17 @@
             android:textColor="@color/text_dark"
             android:textSize="18sp"
             tools:text="Apakah wajar merasa cemas sebelum presentasi penting?" />
+
+        <TextView
+            android:id="@+id/tv_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/lato_regular"
+            android:textColor="@color/calm_blue"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            tools:text="oleh Alfan" />
 
         <TextView
             android:id="@+id/tv_post_content_snippet"
@@ -38,30 +49,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_author"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/lato_regular"
-                android:textColor="@color/calm_blue"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                tools:text="oleh Alfan" />
-
-            <TextView
-                android:id="@+id/tv_post_stats"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_support"
+                style="@style/Widget.Material3.Button.TextButton.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/lato_regular"
+                tools:text="12 Dukung"
+                android:textSize="12sp"
+                app:icon="@drawable/ic_favorite_border"
+                app:iconPadding="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_comment"
+                style="@style/Widget.Material3.Button.TextButton.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                tools:text="5 Komentar"
                 android:textColor="@color/text_light"
                 android:textSize="12sp"
-                tools:text="5 Komentar • 12 Dukungan" />
+                app:icon="@drawable/ic_comment"
+                app:iconPadding="8dp"
+                app:iconTint="@color/text_light" />
         </LinearLayout>
-
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
-

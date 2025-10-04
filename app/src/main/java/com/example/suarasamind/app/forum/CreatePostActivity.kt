@@ -1,11 +1,10 @@
-package com.example.suarasamind.app
+package com.example.suarasamind.app.forum
 
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.example.suarasamind.app.main.BaseActivity
 import com.example.suarasamind.app.data.ForumPost
 import com.example.suarasamind.app.databinding.ActivityCreatePostBinding
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class CreatePostActivity : BaseActivity<ActivityCreatePostBinding>() { // Perbaikan 1: Warisi BaseActivity

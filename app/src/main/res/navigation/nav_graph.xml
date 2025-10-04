@@ -8,7 +8,7 @@
     <!-- Home Fragment -->
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.suarasamind.app.fragments.HomeFragment"
+        android:name="com.example.suarasamind.app.home.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home">
         <!-- Aksi untuk berpindah dari Home ke Forum -->
@@ -20,7 +20,7 @@
     <!-- Forum Fragment -->
     <fragment
         android:id="@+id/forumFragment"
-        android:name="com.example.suarasamind.app.fragments.ForumFragment"
+        android:name="com.example.suarasamind.app.forum.ForumFragment"
         android:label="Forum"
         tools:layout="@layout/fragment_forum">
         <!-- Aksi untuk berpindah dari Forum ke Home -->
@@ -32,7 +32,7 @@
     <!-- Journal Fragment -->
     <fragment
         android:id="@+id/journalFragment"
-        android:name="com.example.suarasamind.app.fragments.JournalFragment"
+        android:name="com.example.suarasamind.app.journal.JournalFragment"
         android:label="Journal"
         tools:layout="@layout/fragment_journal">
         <!-- Aksi untuk berpindah dari Journal ke Home -->
@@ -44,7 +44,7 @@
     <!-- Profile Fragment -->
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.suarasamind.app.fragments.ProfileFragment"
+        android:name="com.example.suarasamind.app.profile.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile">
         <!-- Aksi untuk berpindah dari Profile ke Home -->

@@ -1,16 +1,15 @@
-package com.example.suarasamind.app
+package com.example.suarasamind.app.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import androidx.viewbinding.ViewBinding
+import com.example.suarasamind.app.R
+import com.example.suarasamind.app.auth.LoginActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
@@ -22,7 +21,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // ✅ Auth check
+        // Auth check
         firebaseAuth = FirebaseAuth.getInstance()
         if (firebaseAuth.currentUser == null) {
             startActivity(Intent(this, LoginActivity::class.java))
@@ -30,7 +29,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
             return
         }
 
-        // ✅ Setup ViewBinding
+        // Setup ViewBinding
         binding = inflateBinding()
         setContentView(binding.root)
     }
@@ -38,29 +37,22 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
     abstract fun inflateBinding(): VB
 
     /**
-     * Setup Bottom Navigation dengan NavController
+     * Setup Bottom Navigation dengan NavController (Versi Paling Stabil)
+     * Menghubungkan NavView dengan NavController secara otomatis.
      */
     protected fun setupBottomNavigation(navView: BottomNavigationView) {
         try {
-            // ✅ Ambil NavHostFragment dari layout
+            // Ambil NavHostFragment dari layout
             val navHostFragment =
                 supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
             navController = navHostFragment.navController
 
-            // ✅ Auto sinkron dengan Navigation Component
+            // Auto sinkron dengan Navigation Component
             NavigationUI.setupWithNavController(navView, navController)
 
-            Log.d("NavigasiDebug", "BottomNavigation setup berhasil")
         } catch (e: Exception) {
-            Log.e("NavigasiDebug", "Error saat setup NavController", e)
+            // Jika terjadi error, catat di Logcat
+            e.printStackTrace()
         }
-    }
-
-    /**
-     * Menampilkan pesan "Segera hadir"
-     */
-    protected fun showComingSoonMessage(featureName: String) {
-        val rootView = window.decorView.findViewById<View>(android.R.id.content)
-        Snackbar.make(rootView, "$featureName segera hadir!", Snackbar.LENGTH_SHORT).show()
     }
 }

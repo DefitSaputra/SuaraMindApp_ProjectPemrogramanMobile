@@ -1,49 +1,64 @@
 package com.example.suarasamind.app.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.suarasamind.app.R
 import com.example.suarasamind.app.data.ForumPost
+import com.example.suarasamind.app.databinding.ItemForumPostFullBinding
+import com.google.android.material.button.MaterialButton
 
-class ForumAdapter(private val postList: List<ForumPost>) :
+class ForumAdapter(private val postList: List<ForumPost>, private val currentUserId: String) :
     RecyclerView.Adapter<ForumAdapter.ViewHolder>() {
 
-    // Listener untuk menangani klik pada setiap item
     var onItemClick: ((ForumPost) -> Unit)? = null
+    var onSupportClick: ((ForumPost) -> Unit)? = null
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val title: TextView = view.findViewById(R.id.tv_post_title)
-        val snippet: TextView = view.findViewById(R.id.tv_post_content_snippet)
-        val author: TextView = view.findViewById(R.id.tv_author)
-        val stats: TextView = view.findViewById(R.id.tv_post_stats)
-
+    inner class ViewHolder(private val binding: ItemForumPostFullBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             itemView.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    onItemClick?.invoke(postList[position])
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    onItemClick?.invoke(postList[adapterPosition])
                 }
+            }
+            binding.btnSupport.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    onSupportClick?.invoke(postList[adapterPosition])
+                }
+            }
+        }
+
+        fun bind(post: ForumPost) {
+            binding.tvPostTitle.text = post.title
+            binding.tvPostContentSnippet.text = post.content
+            binding.tvAuthor.text = "oleh ${post.authorUsername}"
+
+            binding.btnSupport.text = "${post.supportCount} Dukung"
+            binding.btnComment.text = "${post.commentCount} Komentar"
+
+            // Logika untuk status ikon "like"
+            if (post.supporters.contains(currentUserId)) {
+                binding.btnSupport.setIconResource(R.drawable.ic_favorite_filled)
+                // PERUBAHAN: Gunakan calm_blue agar konsisten
+                binding.btnSupport.iconTint = ContextCompat.getColorStateList(itemView.context, R.color.calm_blue)
+                binding.btnSupport.setTextColor(ContextCompat.getColor(itemView.context, R.color.calm_blue))
+            } else {
+                binding.btnSupport.setIconResource(R.drawable.ic_favorite_border)
+                binding.btnSupport.iconTint = ContextCompat.getColorStateList(itemView.context, R.color.text_light)
+                binding.btnSupport.setTextColor(ContextCompat.getColor(itemView.context, R.color.text_light))
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_forum_post_full, parent, false)
-        return ViewHolder(view)
+        val binding = ItemForumPostFullBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val post = postList[position]
-        holder.title.text = post.title
-        holder.snippet.text = post.content
-        holder.author.text = "oleh ${post.authorUsername}"
-        holder.stats.text = "${post.commentCount} Komentar • ${post.supportCount} Dukungan"
+        holder.bind(postList[position])
     }
 
     override fun getItemCount() = postList.size
 }
-

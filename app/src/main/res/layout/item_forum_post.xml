@@ -1,33 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
     android:layout_marginBottom="12dp"
-    android:background="@drawable/bg_rounded_card">
+    style="@style/Widget.Suarasa.ContentCard">
 
-    <!-- Judul Postingan Forum -->
-    <TextView
-        android:id="@+id/tv_post_title"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/nunito_bold"
-        android:textColor="@color/text_dark"
-        android:textSize="16sp"
-        tools:text="Apakah wajar merasa cemas sebelum presentasi penting?"/>
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <!-- Detail Postingan (Jumlah Komentar, dll.) -->
-    <TextView
-        android:id="@+id/tv_post_details"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/lato_regular"
-        android:textColor="@color/text_light"
-        android:textSize="12sp"
-        tools:text="5 Komentar • 12 Dukungan"/>
+        <TextView
+            android:id="@+id/tv_post_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_bold"
+            android:textColor="@color/text_dark"
+            android:textSize="16sp"
+            tools:text="Apakah wajar merasa cemas sebelum presentasi penting?"/>
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/tv_post_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/lato_regular"
+            android:textColor="@color/text_light"
+            android:textSize="12sp"
+            tools:text="5 Komentar • 12 Dukungan"/>
 
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

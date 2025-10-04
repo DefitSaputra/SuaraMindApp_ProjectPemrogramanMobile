@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -15,7 +19,19 @@
         android:theme="@style/Theme.SuarasaMind"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".profile.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".profile.EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".journal.JournalDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".journal.WriteJournalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".main.MainActivity"
             android:exported="false" />
         <activity
             android:name=".SplashActivity"
@@ -31,20 +47,18 @@
             android:name=".OnboardingActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".auth.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".auth.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".HomeActivity"
-            android:exported="false" /> <!-- ACTIVITY BARU DIDAFTARKAN DI SINI -->
-        <activity
-            android:name=".CreatePostActivity"
+            android:name=".forum.CreatePostActivity"
             android:exported="false" />
         <activity
-            android:name=".PostDetailActivity"
-            android:exported="false" />
+            android:name=".forum.PostDetailActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

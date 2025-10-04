@@ -10,78 +10,85 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.suarasamind.app.R
 import com.example.suarasamind.app.data.MoodData
+import com.google.android.material.card.MaterialCardView
 
 class MoodAdapter(private val moodList: List<MoodData>) :
-    RecyclerView.Adapter<MoodAdapter.ViewHolder>() {
+    RecyclerView.Adapter<MoodAdapter.MoodViewHolder>() {
 
-    // Listener untuk menangani klik pada mood
-    var onItemClick: ((MoodData) -> Unit)? = null
     private var selectedPosition = -1
+    var onItemClick: ((MoodData) -> Unit)? = null
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val moodImage: ImageView = view.findViewById(R.id.iv_mood)
-        val moodLabel: TextView = view.findViewById(R.id.tv_mood_label)
-
-        init {
-            itemView.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    // Update selected position
-                    val previousPosition = selectedPosition
-                    selectedPosition = position
-
-                    // Notify adapter to update UI
-                    if (previousPosition != -1) {
-                        notifyItemChanged(previousPosition)
-                    }
-                    notifyItemChanged(position)
-
-                    // Trigger callback
-                    onItemClick?.invoke(moodList[position])
-                }
-            }
-        }
+    inner class MoodViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val cardMood: MaterialCardView = itemView.findViewById(R.id.card_mood)
+        val ivMood: ImageView = itemView.findViewById(R.id.iv_mood)
+        val viewMoodBorder: View = itemView.findViewById(R.id.view_mood_border)
+        val tvMoodLabel: TextView = itemView.findViewById(R.id.tv_mood_label)
+        val ivMoodCheck: ImageView = itemView.findViewById(R.id.iv_mood_check)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoodViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_mood_tracker, parent, false)
-        return ViewHolder(view)
+        return MoodViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MoodViewHolder, position: Int) {
         val mood = moodList[position]
-        holder.moodImage.setImageResource(mood.drawableResId)
+        val context = holder.itemView.context
 
-        // Set label berdasarkan type
-        holder.moodLabel.text = when (mood.type) {
+        // Set mood icon - menggunakan iconResId dari MoodData
+        holder.ivMood.setImageResource(mood.iconResId)
+
+        // Set mood label berdasarkan type
+        val moodLabel = when (mood.type) {
             "sad" -> "Sedih"
             "angry" -> "Marah"
             "flat" -> "Datar"
             "happy" -> "Senang"
-            else -> ""
+            else -> "Mood"
+        }
+        holder.tvMoodLabel.text = moodLabel
+
+        // Handle selection state
+        val isSelected = position == selectedPosition
+        if (isSelected) {
+            // Selected state
+            holder.ivMoodCheck.visibility = View.VISIBLE
+            holder.cardMood.cardElevation = 8f
+            holder.cardMood.strokeWidth = 3
+            holder.cardMood.strokeColor = ContextCompat.getColor(context, mood.borderColorResId)
+
+            // Animate scale
+            holder.ivMood.animate().scaleX(1.1f).scaleY(1.1f).setDuration(200).start()
+
+            // Make emoji more prominent
+            holder.ivMood.alpha = 1.0f
+        } else {
+            // Normal state
+            holder.ivMoodCheck.visibility = View.GONE
+            holder.cardMood.cardElevation = 4f
+            holder.cardMood.strokeWidth = 0
+
+            // Reset scale
+            holder.ivMood.animate().scaleX(1.0f).scaleY(1.0f).setDuration(200).start()
+
+            // Slightly transparent emoji
+            holder.ivMood.alpha = 0.85f
         }
 
-        // Apply selection effect
-        if (position == selectedPosition) {
-            // Selected state
-            holder.moodImage.animate().scaleX(1.2f).scaleY(1.2f).setDuration(200).start()
+        // Click listener
+        holder.cardMood.setOnClickListener {
+            val previousPosition = selectedPosition
+            selectedPosition = holder.adapterPosition
 
-            // Create background drawable
-            val drawable = GradientDrawable().apply {
-                shape = GradientDrawable.OVAL
-                setColor(ContextCompat.getColor(holder.itemView.context, mood.backgroundColorResId))
-                setStroke(4, ContextCompat.getColor(holder.itemView.context, mood.borderColorResId))
-            }
-            holder.moodImage.background = drawable
-            holder.moodImage.alpha = 1.0f
-        } else {
-            // Unselected state
-            holder.moodImage.animate().scaleX(1.0f).scaleY(1.0f).setDuration(200).start()
-            holder.moodImage.background = null
-            holder.moodImage.alpha = 0.7f
+            // Notify changes for animation
+            notifyItemChanged(previousPosition)
+            notifyItemChanged(selectedPosition)
+
+            // Trigger callback
+            onItemClick?.invoke(mood)
         }
     }
 
-    override fun getItemCount() = moodList.size
+    override fun getItemCount(): Int = moodList.size
 }

@@ -1,26 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="8dp">
+    android:layout_marginEnd="12dp">
 
-    <ImageView
-        android:id="@+id/iv_mood"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="4dp"
-        tools:src="@drawable/emo_happy"
-        android:contentDescription="Mood" />
-
-    <TextView
-        android:id="@+id/tv_mood_label"
-        android:layout_width="wrap_content"
+    <!-- Background Card dengan Shadow -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_mood"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:textColor="@color/text_light"
-        tools:text="Senang" />
+        app:cardCornerRadius="20dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="16dp">
+
+            <!-- Mood Icon Container dengan Border Circle -->
+            <FrameLayout
+                android:id="@+id/frame_mood"
+                android:layout_width="56dp"
+                android:layout_height="56dp">
+
+                <!-- Background Circle untuk Border -->
+                <View
+                    android:id="@+id/view_mood_border"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+                <!-- Mood Emoji Icon -->
+                <ImageView
+                    android:id="@+id/iv_mood"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="Mood Emoji"
+                    tools:src="@drawable/emo_happy"/>
+
+            </FrameLayout>
+
+            <!-- Mood Label -->
+            <TextView
+                android:id="@+id/tv_mood_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Senang"
+                android:textColor="@color/text_dark"
+                android:textSize="12sp"
+                android:fontFamily="@font/lato_regular"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Selection Indicator (Checkmark) -->
+    <ImageView
+        android:id="@+id/iv_mood_check"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_check_circle"
+        android:visibility="gone"
+        app:tint="@color/calm_blue"
+        app:layout_constraintTop_toTopOf="@id/card_mood"
+        app:layout_constraintEnd_toEndOf="@id/card_mood"
+        android:layout_marginTop="-8dp"
+        android:layout_marginEnd="-8dp"
+        android:elevation="8dp"
+        android:contentDescription="Terpilih"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,30 +2,79 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="200dp"
+    android:layout_width="280dp"
     android:layout_height="wrap_content"
     android:layout_marginEnd="16dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    app:cardCornerRadius="20dp"
+    app:cardElevation="2dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/iv_content_image"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_article_placeholder"
-            android:contentDescription="Gambar Artikel"/>
+        <!-- Image with Overlay Gradient -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_image"
+            android:layout_width="0dp"
+            android:layout_height="160dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/iv_content_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_article_placeholder"
+                    android:contentDescription="Gambar Artikel"/>
+
+                <!-- Gradient Overlay -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/gradient_overlay"/>
+
+            </FrameLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Content Container -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="12dp">
+            android:padding="16dp"
+            app:layout_constraintTop_toBottomOf="@id/card_image"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <!-- Category Badge -->
+            <TextView
+                android:id="@+id/tv_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tips Kesehatan"
+                android:fontFamily="@font/lato_regular"
+                android:textColor="@color/calm_blue"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:background="@drawable/bg_category_badge"
+                android:layout_marginBottom="8dp"/>
 
             <TextView
                 android:id="@+id/tv_content_title"
@@ -34,20 +83,75 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="@color/text_dark"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                tools:text="Tips Jitu Mengelola Stres Kerja"/>
+                android:textSize="16sp"
+                android:fontFamily="@font/nunito_bold"
+                android:lineSpacingExtra="2dp"
+                tools:text="Tips Jitu Mengelola Stres Kerja dengan Efektif"/>
 
             <TextView
                 android:id="@+id/tv_content_snippet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="@color/text_light"
-                android:textSize="12sp"
+                android:textSize="13sp"
+                android:fontFamily="@font/lato_regular"
+                android:lineSpacingExtra="2dp"
                 tools:text="Pelajari cara mengelola stres di tempat kerja dengan teknik-teknik sederhana..."/>
+
+            <!-- Read Time & Views -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:src="@drawable/ic_clock"
+                    app:tint="@color/text_light"
+                    android:contentDescription="Waktu baca"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="5 menit"
+                    android:textColor="@color/text_light"
+                    android:textSize="11sp"
+                    android:fontFamily="@font/lato_regular"/>
+
+                <View
+                    android:layout_width="4dp"
+                    android:layout_height="4dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/bg_dot"
+                    android:backgroundTint="@color/text_super_light"/>
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:src="@drawable/ic_eye"
+                    app:tint="@color/text_light"
+                    android:contentDescription="Jumlah pembaca"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="1.2k"
+                    android:textColor="@color/text_light"
+                    android:textSize="11sp"
+                    android:fontFamily="@font/lato_regular"/>
+
+            </LinearLayout>
+
         </LinearLayout>
-    </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

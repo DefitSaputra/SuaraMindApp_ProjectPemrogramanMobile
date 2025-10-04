@@ -1,4 +1,3 @@
-// File: SplashActivity.kt (VERSI YANG SUDAH DIPERBAIKI)
 
 package com.example.suarasamind.app
 
@@ -7,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.example.suarasamind.app.main.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 
 @SuppressLint("CustomSplashScreen")
