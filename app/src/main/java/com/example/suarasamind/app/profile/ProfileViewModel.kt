@@ -62,7 +62,6 @@ class ProfileViewModel : ViewModel() {
             .addOnFailureListener { e -> Log.w("ProfileViewModel", "Error updating name", e) }
     }
 
-    // FUNGSI BARU: Untuk upload gambar ke Firebase Storage
     fun uploadProfileImage(imageUri: Uri) {
         if (currentUserId.isEmpty()) return
         _uploadStatus.value = "Mengupload foto..."
@@ -80,7 +79,6 @@ class ProfileViewModel : ViewModel() {
             }
     }
 
-    // FUNGSI BARU: Untuk menyimpan link gambar ke Firestore
     private fun updateProfileImageUrl(imageUrl: String) {
         firestore.collection("users").document(currentUserId)
             .update("profileImageUrl", imageUrl)

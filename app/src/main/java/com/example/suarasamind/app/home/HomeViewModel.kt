@@ -109,7 +109,6 @@ class HomeViewModel : ViewModel() {
         }.addOnFailureListener { e -> Log.w("HomeViewModel", "Error toggling support", e) }
     }
 
-    // PENYESUAIAN: Tambahkan fungsi ini untuk menyimpan mood
     fun saveMood(moodType: String) {
         if (currentUserId.isEmpty()) return
 

@@ -95,7 +95,6 @@ class WriteJournalActivity : BaseActivity<ActivityWriteJournalBinding>() {
 
         // PERUBAHAN 3: Logika penyimpanan dibedakan antara edit dan buat baru
         if (existingJournalId != null) {
-            // Mode EDIT: Gunakan .set() untuk menimpa dokumen lama
             firestore.collection("users").document(userId)
                 .collection("journals").document(existingJournalId!!)
                 .set(entry)

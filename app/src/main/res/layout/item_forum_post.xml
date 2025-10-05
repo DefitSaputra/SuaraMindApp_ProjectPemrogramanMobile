@@ -6,33 +6,121 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
-    style="@style/Widget.Suarasa.ContentCard">
+    app:cardCornerRadius="20dp"
+    app:cardElevation="2dp"
+    app:strokeWidth="0dp"
+    app:cardBackgroundColor="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="20dp">
 
+        <!-- Icon Forum di pojok kiri -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp"
+            app:cardBackgroundColor="@color/mood_happy_bg"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_forum"
+                app:tint="@color/accent_warm_yellow"
+                android:contentDescription="Forum icon"/>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Title Post -->
         <TextView
             android:id="@+id/tv_post_title"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:fontFamily="@font/nunito_bold"
             android:textColor="@color/text_dark"
             android:textSize="16sp"
+            android:lineSpacingExtra="2dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            app:layout_constraintTop_toTopOf="@id/card_icon"
+            app:layout_constraintBottom_toBottomOf="@id/card_icon"
+            app:layout_constraintStart_toEndOf="@id/card_icon"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:text="Apakah wajar merasa cemas sebelum presentasi penting?"/>
 
-        <TextView
-            android:id="@+id/tv_post_details"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:fontFamily="@font/lato_regular"
-            android:textColor="@color/text_light"
-            android:textSize="12sp"
-            tools:text="5 Komentar • 12 Dukungan"/>
+        <!-- Divider -->
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/text_super_light"
+            app:layout_constraintTop_toBottomOf="@id/card_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-    </LinearLayout>
+        <!-- Post Details Container -->
+        <LinearLayout
+            android:id="@+id/layout_details"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- Post Details Text -->
+            <TextView
+                android:id="@+id/tv_post_details"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato_regular"
+                android:textColor="@color/text_light"
+                android:textSize="13sp"
+                tools:text="5 Komentar • 12 Dukungan"/>
+
+        </LinearLayout>
+
+        <!-- Support Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_support"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="Dukung"
+            android:textSize="12sp"
+            android:fontFamily="@font/nunito_bold"
+            android:textColor="@color/calm_blue"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:icon="@drawable/ic_favorite_border"
+            app:iconSize="16dp"
+            app:iconTint="@color/calm_blue"
+            app:iconGravity="textStart"
+            app:iconPadding="6dp"
+            app:cornerRadius="12dp"
+            app:strokeColor="@color/calm_blue"
+            app:strokeWidth="1.5dp"
+            app:backgroundTint="@android:color/transparent"
+            app:rippleColor="@color/mood_sad_bg"
+            app:layout_constraintTop_toBottomOf="@id/layout_details"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="12dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

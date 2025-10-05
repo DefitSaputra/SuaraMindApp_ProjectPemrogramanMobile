@@ -7,24 +7,33 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.suarasamind.app.R
 import com.example.suarasamind.app.data.ForumPost
 import com.example.suarasamind.app.databinding.ItemForumPostFullBinding
-import com.google.android.material.button.MaterialButton
 
-class ForumAdapter(private val postList: List<ForumPost>, private val currentUserId: String) :
+class ForumAdapter(private var postList: MutableList<ForumPost>, private val currentUserId: String) :
     RecyclerView.Adapter<ForumAdapter.ViewHolder>() {
 
     var onItemClick: ((ForumPost) -> Unit)? = null
     var onSupportClick: ((ForumPost) -> Unit)? = null
 
+    fun updatePosts(newPosts: List<ForumPost>) {
+        postList.clear()
+        postList.addAll(newPosts)
+        notifyDataSetChanged()
+    }
+
     inner class ViewHolder(private val binding: ItemForumPostFullBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             itemView.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    onItemClick?.invoke(postList[adapterPosition])
+                // PERUBAHAN: Mengganti adapterPosition menjadi bindingAdapterPosition
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onItemClick?.invoke(postList[position])
                 }
             }
             binding.btnSupport.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    onSupportClick?.invoke(postList[adapterPosition])
+                // PERUBAHAN: Mengganti adapterPosition menjadi bindingAdapterPosition
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onSupportClick?.invoke(postList[position])
                 }
             }
         }
@@ -37,10 +46,8 @@ class ForumAdapter(private val postList: List<ForumPost>, private val currentUse
             binding.btnSupport.text = "${post.supportCount} Dukung"
             binding.btnComment.text = "${post.commentCount} Komentar"
 
-            // Logika untuk status ikon "like"
             if (post.supporters.contains(currentUserId)) {
                 binding.btnSupport.setIconResource(R.drawable.ic_favorite_filled)
-                // PERUBAHAN: Gunakan calm_blue agar konsisten
                 binding.btnSupport.iconTint = ContextCompat.getColorStateList(itemView.context, R.color.calm_blue)
                 binding.btnSupport.setTextColor(ContextCompat.getColor(itemView.context, R.color.calm_blue))
             } else {

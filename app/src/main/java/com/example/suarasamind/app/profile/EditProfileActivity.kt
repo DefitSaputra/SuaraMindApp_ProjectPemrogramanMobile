@@ -8,8 +8,6 @@ import com.example.suarasamind.app.main.BaseActivity
 
 class EditProfileActivity : BaseActivity<ActivityEditProfileBinding>() {
 
-    // Kita akan gunakan ViewModel yang sama dengan ProfileFragment
-    // (ini kurang ideal, tapi cara termudah untuk sekarang)
     private val profileViewModel: ProfileViewModel by viewModels()
 
     override fun inflateBinding(): ActivityEditProfileBinding {
@@ -18,8 +16,6 @@ class EditProfileActivity : BaseActivity<ActivityEditProfileBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Ambil nama saat ini yang dikirim dari ProfileFragment
         val currentName = intent.getStringExtra("CURRENT_NAME")
         binding.etFullName.setText(currentName)
 
@@ -32,7 +28,7 @@ class EditProfileActivity : BaseActivity<ActivityEditProfileBinding>() {
             if (newName.isNotEmpty()) {
                 profileViewModel.updateUserName(newName)
                 Toast.makeText(this, "Profil berhasil diperbarui", Toast.LENGTH_SHORT).show()
-                finish() // Tutup halaman setelah menyimpan
+                finish()
             } else {
                 Toast.makeText(this, "Nama tidak boleh kosong", Toast.LENGTH_SHORT).show()
             }

@@ -54,7 +54,6 @@ class ChangePasswordActivity : BaseActivity<ActivityChangePasswordBinding>() {
             return
         }
 
-        // Langkah 1: Re-autentikasi pengguna dengan password saat ini
         val credential = EmailAuthProvider.getCredential(user.email!!, currentPassword)
         user.reauthenticate(credential)
             .addOnSuccessListener {

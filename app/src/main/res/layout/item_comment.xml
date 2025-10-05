@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="#F0F0F0"
+    app:cardBackgroundColor="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="16dp">
 
         <ImageView
             android:id="@+id/iv_comment_avatar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_circle_account"
-            android:contentDescription="Avatar Pengguna"/>
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_person_circle"
+            app:tint="@color/fresh_green"
+            android:contentDescription="Comment Author"/>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:orientation="vertical">
@@ -30,34 +40,32 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/nunito_bold"
                 android:textColor="@color/text_dark"
-                tools:text="Nama Pengguna"/>
+                android:textSize="14sp"
+                tools:text="Budi Santoso"/>
 
             <TextView
                 android:id="@+id/tv_comment_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:fontFamily="@font/lato_regular"
                 android:textColor="@color/text_dark"
-                tools:text="Isi komentar di sini..."/>
+                android:textSize="14sp"
+                android:lineSpacingExtra="2dp"
+                tools:text="Sangat wajar kok! Aku juga sering mengalami hal yang sama. Coba teknik pernapasan sebelum presentasi, sangat membantu."/>
 
             <TextView
-                android:id="@+id/tv_comment_date"
+                android:id="@+id/tv_comment_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:fontFamily="@font/lato_regular"
                 android:textColor="@color/text_light"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 tools:text="2 jam yang lalu"/>
+
         </LinearLayout>
+
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
-        android:background="@color/text_super_light"/>
-
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -16,7 +16,6 @@ class JournalFragment : Fragment() {
     private var _binding: FragmentJournalBinding? = null
     private val binding get() = _binding!!
 
-    // Inisialisasi ViewModel
     private val journalViewModel: JournalViewModel by viewModels()
 
     private lateinit var journalAdapter: JournalAdapter
@@ -42,7 +41,6 @@ class JournalFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        // Inisialisasi adapter dengan list kosong, data akan diisi oleh ViewModel
         journalAdapter = JournalAdapter(emptyList())
         binding.rvJournalEntries.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -51,14 +49,9 @@ class JournalFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        // Mengamati perubahan data dari ViewModel
         journalViewModel.journalEntries.observe(viewLifecycleOwner) { entryList ->
-            // Saat data baru datang, update adapter
             journalAdapter = JournalAdapter(entryList)
             binding.rvJournalEntries.adapter = journalAdapter
-
-            // Atur listener klik untuk item di dalam adapter yang baru
-            // PERUBAHAN: Ganti Toast dengan Intent untuk membuka halaman detail
             journalAdapter.onItemClick = { journalEntry ->
                 val intent = Intent(requireActivity(), JournalDetailActivity::class.java)
                 intent.putExtra("JOURNAL_ID", journalEntry.id)

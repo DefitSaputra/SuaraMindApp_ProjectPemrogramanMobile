@@ -2,77 +2,155 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Widget.Suarasa.ContentCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp">
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="2dp"
+    app:strokeWidth="0dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:padding="20dp">
 
+        <!-- Author Badge -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_author_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#1A62a9a5"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_person_circle"
+                    app:tint="@color/calm_blue"
+                    android:contentDescription="Author"/>
+
+                <TextView
+                    android:id="@+id/tv_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:fontFamily="@font/lato_regular"
+                    android:textColor="@color/calm_blue"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    tools:text="Alfan" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Post Title -->
         <TextView
             android:id="@+id/tv_post_title"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:fontFamily="@font/nunito_bold"
             android:textColor="@color/text_dark"
             android:textSize="18sp"
+            android:lineSpacingExtra="2dp"
+            app:layout_constraintTop_toBottomOf="@id/card_author_badge"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:text="Apakah wajar merasa cemas sebelum presentasi penting?" />
 
-        <TextView
-            android:id="@+id/tv_author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/lato_regular"
-            android:textColor="@color/calm_blue"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            tools:text="oleh Alfan" />
-
+        <!-- Post Content Snippet -->
         <TextView
             android:id="@+id/tv_post_content_snippet"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:ellipsize="end"
             android:fontFamily="@font/lato_regular"
-            android:maxLines="2"
+            android:maxLines="3"
             android:textColor="@color/text_light"
+            android:textSize="14sp"
+            android:lineSpacingExtra="3dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_post_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:text="Hai semua, aku mau cerita sedikit nih. Beberapa minggu lagi aku ada presentasi besar di depan klien dan aku merasa sangat cemas sampai susah tidur..." />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <!-- Divider -->
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
             android:layout_marginTop="16dp"
-            android:orientation="horizontal">
+            android:background="#F0F0F0"
+            app:layout_constraintTop_toBottomOf="@id/tv_post_content_snippet"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
+        <!-- Action Buttons Container -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <!-- Support Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_support"
                 style="@style/Widget.Material3.Button.TextButton.Icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="12 Dukung"
-                android:textSize="12sp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="44dp"
+                android:textSize="13sp"
+                android:fontFamily="@font/lato_regular"
+                android:textStyle="bold"
                 app:icon="@drawable/ic_favorite_border"
-                app:iconPadding="8dp" />
+                app:iconSize="20dp"
+                app:iconPadding="8dp"
+                app:iconGravity="textStart"
+                tools:text="12 Dukung" />
 
+            <!-- Comment Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_comment"
                 style="@style/Widget.Material3.Button.TextButton.Icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                tools:text="5 Komentar"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="44dp"
                 android:textColor="@color/text_light"
-                android:textSize="12sp"
+                android:textSize="13sp"
+                android:fontFamily="@font/lato_regular"
+                android:textStyle="bold"
                 app:icon="@drawable/ic_comment"
+                app:iconSize="20dp"
                 app:iconPadding="8dp"
-                app:iconTint="@color/text_light" />
+                app:iconTint="@color/text_light"
+                app:iconGravity="textStart"
+                tools:text="5 Komentar" />
+
         </LinearLayout>
-    </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </com.google.android.material.card.MaterialCardView>

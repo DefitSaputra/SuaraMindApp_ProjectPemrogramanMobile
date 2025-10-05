@@ -36,22 +36,14 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
 
     abstract fun inflateBinding(): VB
 
-    /**
-     * Setup Bottom Navigation dengan NavController (Versi Paling Stabil)
-     * Menghubungkan NavView dengan NavController secara otomatis.
-     */
+
     protected fun setupBottomNavigation(navView: BottomNavigationView) {
         try {
-            // Ambil NavHostFragment dari layout
             val navHostFragment =
                 supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
             navController = navHostFragment.navController
-
-            // Auto sinkron dengan Navigation Component
             NavigationUI.setupWithNavController(navView, navController)
-
         } catch (e: Exception) {
-            // Jika terjadi error, catat di Logcat
             e.printStackTrace()
         }
     }

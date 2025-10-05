@@ -1,6 +1,7 @@
 package com.example.suarasamind.app.home
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,6 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.suarasamind.app.R
 import com.example.suarasamind.app.adapters.ContentAdapter
@@ -18,6 +18,7 @@ import com.example.suarasamind.app.adapters.MoodAdapter
 import com.example.suarasamind.app.auth.LoginActivity
 import com.example.suarasamind.app.data.MoodData
 import com.example.suarasamind.app.databinding.FragmentHomeBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -30,6 +31,7 @@ class HomeFragment : Fragment() {
 
     private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var moodAdapter: MoodAdapter
+    private lateinit var forumAdapter: ForumAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -51,8 +53,23 @@ class HomeFragment : Fragment() {
     private fun setupUI() {
         setupMoodTracker()
         binding.rvArticles.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        forumAdapter = ForumAdapter(mutableListOf(), currentUserId)
         binding.rvForum.layoutManager = LinearLayoutManager(requireContext())
         binding.rvForum.isNestedScrollingEnabled = false
+        binding.rvForum.adapter = forumAdapter
+
+        forumAdapter.onItemClick = {
+            // PERUBAHAN KRUSIAL DI SINI:
+            // Menggunakan ID baru 'bottom_nav_view' yang Anda definisikan.
+            val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view)
+            bottomNav.selectedItemId = R.id.forumFragment
+        }
+
+        forumAdapter.onSupportClick = { post ->
+            homeViewModel.toggleSupport(post)
+        }
 
         val todayDate = SimpleDateFormat("EEEE, dd MMM yyyy", Locale("id", "ID")).format(Date())
         binding.tvDate.text = todayDate
@@ -67,68 +84,38 @@ class HomeFragment : Fragment() {
             val contentAdapter = ContentAdapter(articles)
             binding.rvArticles.adapter = contentAdapter
             contentAdapter.onItemClick = { article ->
-                Toast.makeText(requireContext(), "Membuka artikel: ${article.title}", Toast.LENGTH_SHORT).show()
+                if (article.articleUrl.isNotEmpty()) {
+                    try {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(article.articleUrl))
+                        startActivity(intent)
+                    } catch (e: Exception) {
+                        Toast.makeText(requireContext(), "Tidak bisa membuka link", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Link artikel tidak tersedia", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
         homeViewModel.forumPosts.observe(viewLifecycleOwner) { posts ->
-            val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-            val forumAdapter = ForumAdapter(posts, currentUserId)
-            binding.rvForum.adapter = forumAdapter
-
-            forumAdapter.onItemClick = {
-                val navController = Navigation.findNavController(requireView())
-                navController.navigate(R.id.action_homeFragment_to_forumFragment)
-            }
-            forumAdapter.onSupportClick = { post ->
-                homeViewModel.toggleSupport(post)
-            }
+            forumAdapter.updatePosts(posts)
         }
     }
 
     private fun setupMoodTracker() {
-        // Daftar mood dengan emoji vector drawable yang sudah Anda miliki
         val moodList = listOf(
-            MoodData(
-                iconResId = R.drawable.emo_sad,
-                borderColorResId = R.color.mood_sad_border,
-                bgColorResId = R.color.mood_sad_bg,
-                message = "Tidak apa-apa, Suarasa Mind ada untukmu. 😊",
-                type = "sad"
-            ),
-            MoodData(
-                iconResId = R.drawable.emo_angry,
-                borderColorResId = R.color.mood_angry_border,
-                bgColorResId = R.color.mood_angry_bg,
-                message = "Wah, sepertinya butuh sedikit ketenangan. Kami di sini!",
-                type = "angry"
-            ),
-            MoodData(
-                iconResId = R.drawable.emo_flat,
-                borderColorResId = R.color.mood_flat_border,
-                bgColorResId = R.color.mood_flat_bg,
-                message = "Kadang begini, mari cari inspirasi bersama! ✨",
-                type = "flat"
-            ),
-            MoodData(
-                iconResId = R.drawable.emo_happy,
-                borderColorResId = R.color.mood_happy_border,
-                bgColorResId = R.color.mood_happy_bg,
-                message = "Senyummu menular! Tetap semangat ya! 🎉",
-                type = "happy"
-            )
+            MoodData(R.drawable.emo_sad, R.color.mood_sad_border, R.color.mood_sad_bg, "Tidak apa-apa, Suarasa Mind ada untukmu. 😊", "sad"),
+            MoodData(R.drawable.emo_angry, R.color.mood_angry_border, R.color.mood_angry_bg, "Wah, sepertinya butuh sedikit ketenangan. Kami di sini!", "angry"),
+            MoodData(R.drawable.emo_flat, R.color.mood_flat_border, R.color.mood_flat_bg, "Kadang begini, mari cari inspirasi bersama! ✨", "flat"),
+            MoodData(R.drawable.emo_happy, R.color.mood_happy_border, R.color.mood_happy_bg, "Senyummu menular! Tetap semangat ya! 🎉", "happy")
         )
-
         moodAdapter = MoodAdapter(moodList)
         binding.rvMoodTracker.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = moodAdapter
         }
-
         moodAdapter.onItemClick = { mood ->
             Toast.makeText(requireContext(), mood.message, Toast.LENGTH_SHORT).show()
-
-            // Simpan mood ke Firebase
             homeViewModel.saveMood(mood.type)
         }
     }
@@ -159,3 +146,4 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 }
+

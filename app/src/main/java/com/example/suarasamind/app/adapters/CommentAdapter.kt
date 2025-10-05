@@ -18,7 +18,8 @@ class CommentAdapter(private val commentList: List<Comment>) :
         val avatar: ImageView = view.findViewById(R.id.iv_comment_avatar)
         val author: TextView = view.findViewById(R.id.tv_comment_author)
         val content: TextView = view.findViewById(R.id.tv_comment_content)
-        val date: TextView = view.findViewById(R.id.tv_comment_date)
+        // Diubah dari 'date' dan 'R.id.tv_comment_date'
+        val time: TextView = view.findViewById(R.id.tv_comment_time)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -36,7 +37,8 @@ class CommentAdapter(private val commentList: List<Comment>) :
         // Format tanggal
         comment.timestamp?.let { timestamp ->
             val sdf = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
-            holder.date.text = sdf.format(timestamp)
+            // Variabel disesuaikan
+            holder.time.text = sdf.format(timestamp)
         }
 
     }

@@ -40,35 +40,38 @@ class PostDetailHeaderAdapter(
     inner class HeaderViewHolder(private val binding: ItemPostDetailHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        init {
+            // Set listener untuk tombol support di sini
+            binding.btnSupport.setOnClickListener {
+                onSupportClick?.invoke()
+            }
+        }
+
         fun bind(post: ForumPost) {
             binding.tvPostTitle.text = post.title
+            // PERUBAHAN: Menambahkan "oleh " untuk konsistensi
             binding.tvPostAuthor.text = "oleh ${post.authorUsername}"
             binding.tvPostContent.text = post.content
-            binding.tvSupportCount.text = post.supportCount.toString()
-            binding.tvCommentCount.text = post.commentCount.toString()
+
+            // PERUBAHAN: Menggabungkan jumlah dukungan ke dalam tombol
+            binding.btnSupport.text = "${post.supportCount} Dukung"
+
+            // PERUBAHAN: Menambahkan " Komentar" untuk konsistensi
+            binding.tvCommentCount.text = "${post.commentCount} Komentar"
 
             post.timestamp?.let { timestamp ->
                 val sdf = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
                 binding.tvPostDate.text = "• ${sdf.format(timestamp)}"
             }
 
-            // Atur tampilan tombol support/like
             if (post.supporters.contains(currentUserId)) {
-                // User sudah like
                 binding.btnSupport.setIconResource(R.drawable.ic_favorite_filled)
-                // PERUBAHAN: Gunakan calm_blue agar konsisten
                 binding.btnSupport.iconTint = ContextCompat.getColorStateList(itemView.context, R.color.calm_blue)
                 binding.btnSupport.setTextColor(ContextCompat.getColor(itemView.context, R.color.calm_blue))
             } else {
-                // User belum like
                 binding.btnSupport.setIconResource(R.drawable.ic_favorite_border)
                 binding.btnSupport.iconTint = ContextCompat.getColorStateList(itemView.context, R.color.text_light)
                 binding.btnSupport.setTextColor(ContextCompat.getColor(itemView.context, R.color.text_light))
-            }
-
-            // Set listener untuk tombol support
-            binding.btnSupport.setOnClickListener {
-                onSupportClick?.invoke()
             }
         }
     }

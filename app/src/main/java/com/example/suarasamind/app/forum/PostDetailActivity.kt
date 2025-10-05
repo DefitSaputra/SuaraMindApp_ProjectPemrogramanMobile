@@ -21,8 +21,8 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
     private lateinit var firestore: FirebaseFirestore
     private lateinit var postId: String
     private lateinit var currentUserId: String
+    private var currentUsername = "Pengguna"
 
-    // Adapter baru
     private lateinit var headerAdapter: PostDetailHeaderAdapter
     private lateinit var commentAdapter: CommentAdapter
     private lateinit var concatAdapter: ConcatAdapter
@@ -46,15 +46,15 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
             return
         }
 
+        fetchCurrentUser()
         setupRecyclerView()
-        listenToPostDetails() // Mengganti loadPostDetails menjadi listener
+        listenToPostDetails()
         listenToComments()
 
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
 
-        // Listener untuk tombol kirim komentar yang baru
         binding.btnSendComment.setOnClickListener {
             val commentText = binding.etComment.text.toString().trim()
             if (commentText.isNotEmpty()) {
@@ -65,27 +65,33 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
         }
     }
 
+    private fun fetchCurrentUser() {
+        if (currentUserId.isNotEmpty()) {
+            firestore.collection("users").document(currentUserId).get()
+                .addOnSuccessListener { document ->
+                    if (document != null && document.exists()) {
+                        currentUsername = document.getString("username") ?: "Pengguna"
+                    }
+                }
+        }
+    }
+
     private fun setupRecyclerView() {
-        // Inisialisasi kedua adapter
         headerAdapter = PostDetailHeaderAdapter(currentUserId)
         commentAdapter = CommentAdapter(commentList)
-
-        // Gabungkan keduanya dengan ConcatAdapter
         concatAdapter = ConcatAdapter(headerAdapter, commentAdapter)
 
-        binding.rvPostDetail.apply { // Menggunakan ID RecyclerView utama yang baru
+        binding.rvPostDetail.apply {
             layoutManager = LinearLayoutManager(this@PostDetailActivity)
             adapter = concatAdapter
         }
 
-        // Menambahkan listener untuk tombol support/like yang ada di header
         headerAdapter.onSupportClick = {
             toggleSupport()
         }
     }
 
     private fun listenToPostDetails() {
-        // Gunakan addSnapshotListener agar data post (termasuk jumlah like) otomatis update
         firestore.collection("posts").document(postId)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
@@ -96,7 +102,6 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
                 if (snapshot != null && snapshot.exists()) {
                     val post = snapshot.toObject(ForumPost::class.java)
                     post?.let {
-                        // Kirim data post ke header adapter
                         it.id = snapshot.id
                         headerAdapter.setPost(it)
                     }
@@ -115,6 +120,7 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
                 }
 
                 if (snapshots != null) {
+                    val isFirstLoad = commentList.isEmpty()
                     commentList.clear()
                     for (document in snapshots) {
                         val comment = document.toObject(Comment::class.java)
@@ -122,6 +128,12 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
                         commentList.add(comment)
                     }
                     commentAdapter.notifyDataSetChanged()
+
+                    if(isFirstLoad) {
+                        binding.rvPostDetail.post { scrollToBottom() }
+                    } else {
+                        binding.rvPostDetail.postDelayed({ scrollToBottom() }, 100)
+                    }
                 }
             }
     }
@@ -129,7 +141,7 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
     private fun addComment(commentText: String) {
         val comment = Comment(
             authorId = currentUserId,
-            authorUsername = "Pengguna", // TODO: Ambil nama pengguna saat ini dari Firestore/SharedPreferences
+            authorUsername = currentUsername,
             content = commentText
         )
 
@@ -139,8 +151,11 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
             .addOnSuccessListener {
                 firestore.collection("posts").document(postId)
                     .update("commentCount", FieldValue.increment(1))
-                binding.etComment.text.clear() // Bersihkan input field
+                binding.etComment.text.clear()
                 Toast.makeText(this, "Komentar berhasil ditambahkan", Toast.LENGTH_SHORT).show()
+                binding.rvPostDetail.postDelayed({
+                    scrollToBottom()
+                }, 100)
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Gagal menambah komentar: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -149,24 +164,27 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
 
     private fun toggleSupport() {
         val postRef = firestore.collection("posts").document(postId)
-
         firestore.runTransaction { transaction ->
             val snapshot = transaction.get(postRef)
             val post = snapshot.toObject<ForumPost>() ?: return@runTransaction
 
             val supporters = post.supporters.toMutableList()
             if (supporters.contains(currentUserId)) {
-                // User sudah support, jadi batalkan (unlike)
                 transaction.update(postRef, "supportCount", FieldValue.increment(-1))
                 transaction.update(postRef, "supporters", FieldValue.arrayRemove(currentUserId))
             } else {
-                // User belum support, jadi tambahkan (like)
                 transaction.update(postRef, "supportCount", FieldValue.increment(1))
                 transaction.update(postRef, "supporters", FieldValue.arrayUnion(currentUserId))
             }
         }.addOnFailureListener { e ->
             Log.w("PostDetailActivity", "Error toggling support", e)
             Toast.makeText(this, "Gagal memberikan dukungan", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun scrollToBottom() {
+        if (concatAdapter.itemCount > 0) {
+            binding.rvPostDetail.smoothScrollToPosition(concatAdapter.itemCount - 1)
         }
     }
 }

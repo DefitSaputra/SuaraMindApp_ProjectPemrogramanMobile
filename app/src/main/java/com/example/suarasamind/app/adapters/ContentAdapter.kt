@@ -12,8 +12,6 @@ import com.example.suarasamind.app.data.ContentData
 
 class ContentAdapter(private val contentList: List<ContentData>) :
     RecyclerView.Adapter<ContentAdapter.ViewHolder>() {
-
-    // Tambahkan listener untuk menangani klik pada item
     var onItemClick: ((ContentData) -> Unit)? = null
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

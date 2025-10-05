@@ -18,7 +18,6 @@ class ForumViewModel : ViewModel() {
     private val auth = FirebaseAuth.getInstance()
     private val currentUserId: String get() = auth.currentUser?.uid ?: ""
 
-    // LiveData untuk daftar post
     private val _posts = MutableLiveData<List<ForumPost>>()
     val posts: LiveData<List<ForumPost>> = _posts
 
@@ -29,7 +28,8 @@ class ForumViewModel : ViewModel() {
     }
 
     private fun listenToAllPosts() {
-        // Mengambil semua post, tidak seperti di HomeFragment yang hanya 3
+        postsListener?.remove()
+
         postsListener = firestore.collection("posts")
             .orderBy("timestamp", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshots, error ->
@@ -63,6 +63,10 @@ class ForumViewModel : ViewModel() {
                 transaction.update(postRef, "supporters", FieldValue.arrayUnion(currentUserId))
             }
         }.addOnFailureListener { e -> Log.w("ForumViewModel", "Error toggling support", e) }
+    }
+
+    fun refreshPosts() {
+        listenToAllPosts()
     }
 
     override fun onCleared() {

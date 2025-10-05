@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
+    android.id="@+id/nav_graph"
     app:startDestination="@id/homeFragment">
 
     <!-- Home Fragment -->
@@ -11,7 +11,6 @@
         android:name="com.example.suarasamind.app.home.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home">
-        <!-- Aksi untuk berpindah dari Home ke Forum -->
         <action
             android:id="@+id/action_homeFragment_to_forumFragment"
             app:destination="@id/forumFragment" />
@@ -23,7 +22,6 @@
         android:name="com.example.suarasamind.app.forum.ForumFragment"
         android:label="Forum"
         tools:layout="@layout/fragment_forum">
-        <!-- Aksi untuk berpindah dari Forum ke Home -->
         <action
             android:id="@+id/action_forumFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
@@ -35,7 +33,6 @@
         android:name="com.example.suarasamind.app.journal.JournalFragment"
         android:label="Journal"
         tools:layout="@layout/fragment_journal">
-        <!-- Aksi untuk berpindah dari Journal ke Home -->
         <action
             android:id="@+id/action_journalFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
@@ -47,10 +44,10 @@
         android:name="com.example.suarasamind.app.profile.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile">
-        <!-- Aksi untuk berpindah dari Profile ke Home -->
         <action
             android:id="@+id/action_profileFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
 
 </navigation>
+
