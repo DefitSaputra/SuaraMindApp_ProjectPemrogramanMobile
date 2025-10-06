@@ -11,8 +11,8 @@
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:elevation="2dp">
+        android:background="@android:color/transparent"
+        app:elevation="0dp">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
@@ -20,7 +20,8 @@
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/ic_arrow_back"
             app:title="Detail Jurnal"
-            app:titleCentered="true" />
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/TextAppearance.Suarasa.Headline2"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -34,56 +35,142 @@
             android:orientation="vertical"
             android:padding="24dp">
 
-            <LinearLayout
+            <!-- Header Card dengan Mood dan Date -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="0dp"
+                app:cardBackgroundColor="@color/white">
 
-                <ImageView
-                    android:id="@+id/iv_mood_indicator"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    tools:src="@drawable/emo_happy" />
-
-                <TextView
-                    android:id="@+id/tv_journal_date"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="16dp"
-                    android:fontFamily="@font/lato_regular"
-                    android:textColor="@color/text_light"
-                    android:textSize="16sp"
-                    tools:text="Jumat, 03 Oktober 2025" />
-            </LinearLayout>
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
-            <TextView
-                android:id="@+id/tv_journal_title"
+                    <!-- Mood Indicator dengan Background -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            app:cardCornerRadius="14dp"
+                            app:cardElevation="0dp"
+                            app:strokeWidth="0dp"
+                            app:cardBackgroundColor="@color/mood_flat_bg">
+
+                            <ImageView
+                                android:id="@+id/iv_mood_indicator"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_gravity="center"
+                                tools:src="@drawable/emo_happy" />
+
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <TextView
+                            android:id="@+id/tv_journal_date"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:textColor="@color/text_light"
+                            android:textSize="15sp"
+                            tools:text="Jumat, 03 Oktober 2025" />
+
+                    </LinearLayout>
+
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@color/text_super_light" />
+
+                    <!-- Title -->
+                    <TextView
+                        android:id="@+id/tv_journal_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunito_bold"
+                        android:textColor="@color/text_dark"
+                        android:textSize="26sp"
+                        android:lineSpacingExtra="4dp"
+                        tools:text="Judul Jurnal Ditampilkan di Sini" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Content Card -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:fontFamily="@font/nunito_bold"
-                android:textColor="@color/text_dark"
-                android:textSize="24sp"
-                tools:text="Judul Jurnal Ditampilkan di Sini" />
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="0dp"
+                app:cardBackgroundColor="@color/white">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:background="@color/text_super_light" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
-            <TextView
-                android:id="@+id/tv_journal_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:fontFamily="@font/lato_regular"
-                android:lineSpacingMultiplier="1.4"
-                android:textColor="@color/text_dark"
-                android:textSize="16sp"
-                tools:text="Isi lengkap dari jurnal akan ditampilkan di sini. Bisa berisi teks yang sangat panjang, mencakup beberapa paragraf, menjelaskan semua perasaan dan kejadian yang dialami oleh pengguna pada hari itu." />
+                    <!-- Label Isi Jurnal -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_label_journal"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp">
+
+                        <ImageView
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:src="@drawable/ic_article"
+                            app:tint="@color/fresh_green"
+                            android:contentDescription="Content icon"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="Isi Jurnal"
+                            android:fontFamily="@font/nunito_bold"
+                            android:textColor="@color/fresh_green"
+                            android:textSize="12sp"/>
+
+                    </LinearLayout>
+
+                    <!-- Content -->
+                    <TextView
+                        android:id="@+id/tv_journal_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:lineSpacingMultiplier="1.5"
+                        android:textColor="@color/text_dark"
+                        android:textSize="16sp"
+                        tools:text="Isi lengkap dari jurnal akan ditampilkan di sini. Bisa berisi teks yang sangat panjang, mencakup beberapa paragraf, menjelaskan semua perasaan dan kejadian yang dialami oleh pengguna pada hari itu." />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
 

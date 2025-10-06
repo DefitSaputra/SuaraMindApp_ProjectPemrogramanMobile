@@ -8,20 +8,27 @@
     android:layout_marginEnd="16dp"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="2dp">
+    app:cardCornerRadius="24dp"
+    app:cardElevation="3dp"
+    app:strokeWidth="0dp"
+    app:cardBackgroundColor="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!-- Date Container dengan gradient -->
         <LinearLayout
             android:id="@+id/date_container"
-            android:layout_width="80dp"
+            android:layout_width="90dp"
             android:layout_height="0dp"
-            android:background="@color/mood_flat_bg"
+            android:background="@drawable/bg_journal_date"
             android:gravity="center"
             android:orientation="vertical"
+            android:padding="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -31,39 +38,45 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/nunito_bold"
-                android:textColor="@color/text_dark"
-                android:textSize="12sp"
+                android:textColor="@color/calm_blue"
+                android:textSize="11sp"
+                android:letterSpacing="0.1"
                 tools:text="JUMAT" />
 
             <TextView
                 android:id="@+id/tv_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:fontFamily="@font/nunito_bold"
                 android:textColor="@color/text_dark"
-                android:textSize="28sp"
+                android:textSize="32sp"
                 tools:text="03" />
 
             <TextView
                 android:id="@+id/tv_month_year"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:fontFamily="@font/lato_regular"
                 android:textColor="@color/text_light"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 tools:text="OKT 2025" />
 
         </LinearLayout>
 
+        <!-- Content Section -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp"
+            android:padding="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/date_container"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
+            <!-- Title with Mood -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -80,28 +93,76 @@
                     android:maxLines="1"
                     android:textColor="@color/text_dark"
                     android:textSize="18sp"
+                    android:lineSpacingExtra="2dp"
                     tools:text="Hari yang Melelahkan" />
 
-                <ImageView
-                    android:id="@+id/iv_mood_indicator"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginStart="8dp"
-                    tools:src="@drawable/emo_flat" />
+                <!-- Mood Icon with Background -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="12dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="0dp"
+                    app:cardBackgroundColor="@color/mood_flat_bg">
+
+                    <ImageView
+                        android:id="@+id/iv_mood_indicator"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        tools:src="@drawable/emo_flat" />
+
+                </com.google.android.material.card.MaterialCardView>
 
             </LinearLayout>
 
+            <!-- Content Snippet -->
             <TextView
                 android:id="@+id/tv_journal_snippet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
                 android:ellipsize="end"
                 android:fontFamily="@font/lato_regular"
-                android:lineSpacingMultiplier="1.2"
+                android:lineSpacingMultiplier="1.4"
                 android:maxLines="2"
                 android:textColor="@color/text_light"
+                android:textSize="14sp"
                 tools:text="Hari ini benar-benar menguras energi. Banyak sekali pekerjaan yang harus diselesaikan dan..." />
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@color/text_super_light"/>
+
+            <!-- Read More Indicator -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Baca Selengkapnya"
+                    android:fontFamily="@font/nunito_bold"
+                    android:textColor="@color/calm_blue"
+                    android:textSize="13sp"/>
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="4dp"
+                    android:src="@drawable/ic_arrow_forward"
+                    app:tint="@color/calm_blue"
+                    android:contentDescription="Arrow"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

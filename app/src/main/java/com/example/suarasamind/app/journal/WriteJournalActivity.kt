@@ -2,6 +2,7 @@ package com.example.suarasamind.app.journal
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import com.example.suarasamind.app.data.JournalEntry
 import com.example.suarasamind.app.databinding.ActivityWriteJournalBinding
@@ -13,7 +14,6 @@ class WriteJournalActivity : BaseActivity<ActivityWriteJournalBinding>() {
 
     private lateinit var firestore: FirebaseFirestore
     private var selectedMood: String = "flat"
-
     private var existingJournalId: String? = null
 
     override fun inflateBinding(): ActivityWriteJournalBinding {
@@ -31,7 +31,7 @@ class WriteJournalActivity : BaseActivity<ActivityWriteJournalBinding>() {
             loadExistingJournal()
         } else {
             binding.toolbar.title = "Tulis Jurnal"
-            selectMood(binding.moodFlat, "flat") // Atur mood default
+            selectMood(binding.moodFlat, "flat")
         }
 
         binding.toolbar.setNavigationOnClickListener { finish() }
@@ -64,20 +64,64 @@ class WriteJournalActivity : BaseActivity<ActivityWriteJournalBinding>() {
     }
 
     private fun setupMoodSelectors() {
+        // Set click listener untuk ImageView mood
         binding.moodHappy.setOnClickListener { selectMood(it, "happy") }
         binding.moodFlat.setOnClickListener { selectMood(it, "flat") }
         binding.moodSad.setOnClickListener { selectMood(it, "sad") }
         binding.moodAngry.setOnClickListener { selectMood(it, "angry") }
+
+        // Set click listener untuk parent card juga agar lebih mudah diklik
+        binding.moodHappy.parent?.let { parent ->
+            if (parent is View) {
+                parent.setOnClickListener { selectMood(binding.moodHappy, "happy") }
+            }
+        }
+        binding.moodFlat.parent?.let { parent ->
+            if (parent is View) {
+                parent.setOnClickListener { selectMood(binding.moodFlat, "flat") }
+            }
+        }
+        binding.moodSad.parent?.let { parent ->
+            if (parent is View) {
+                parent.setOnClickListener { selectMood(binding.moodSad, "sad") }
+            }
+        }
+        binding.moodAngry.parent?.let { parent ->
+            if (parent is View) {
+                parent.setOnClickListener { selectMood(binding.moodAngry, "angry") }
+            }
+        }
     }
 
     private fun selectMood(selectedView: View, mood: String) {
+        // Reset semua mood ImageView ke state tidak terpilih
+        resetAllMoodViews()
+
+        // Set mood yang dipilih dengan opacity penuh
+        selectedView.alpha = 1.0f
+
+        // Set parent card juga ke opacity penuh untuk visual feedback yang lebih baik
+        selectedView.parent?.let { parent ->
+            if (parent is ViewGroup) {
+                parent.alpha = 1.0f
+            }
+        }
+
+        selectedMood = mood
+    }
+
+    private fun resetAllMoodViews() {
+        // Reset opacity untuk semua ImageView mood
         binding.moodHappy.alpha = 0.5f
         binding.moodFlat.alpha = 0.5f
         binding.moodSad.alpha = 0.5f
         binding.moodAngry.alpha = 0.5f
 
-        selectedView.alpha = 1.0f
-        selectedMood = mood
+        // Reset opacity untuk semua parent cards
+        (binding.moodHappy.parent as? ViewGroup)?.alpha = 0.5f
+        (binding.moodFlat.parent as? ViewGroup)?.alpha = 0.5f
+        (binding.moodSad.parent as? ViewGroup)?.alpha = 0.5f
+        (binding.moodAngry.parent as? ViewGroup)?.alpha = 0.5f
     }
 
     private fun saveJournalEntry() {
@@ -89,12 +133,16 @@ class WriteJournalActivity : BaseActivity<ActivityWriteJournalBinding>() {
             Toast.makeText(this, "Judul dan isi jurnal tidak boleh kosong", Toast.LENGTH_SHORT).show()
             return
         }
-        if (userId == null) { /* ... */ return }
+
+        if (userId == null) {
+            Toast.makeText(this, "Gagal mendapatkan data pengguna", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         val entry = JournalEntry(title = title, content = content, mood = selectedMood)
 
-        // PERUBAHAN 3: Logika penyimpanan dibedakan antara edit dan buat baru
         if (existingJournalId != null) {
+            // Mode EDIT: Update jurnal yang sudah ada
             firestore.collection("users").document(userId)
                 .collection("journals").document(existingJournalId!!)
                 .set(entry)
@@ -106,6 +154,7 @@ class WriteJournalActivity : BaseActivity<ActivityWriteJournalBinding>() {
                     Toast.makeText(this, "Gagal memperbarui: ${e.message}", Toast.LENGTH_LONG).show()
                 }
         } else {
+            // Mode BUAT BARU: Tambah jurnal baru
             firestore.collection("users").document(userId)
                 .collection("journals").add(entry)
                 .addOnSuccessListener {

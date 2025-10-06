@@ -1,6 +1,5 @@
 package com.example.suarasamind.app.adapters
 
-import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,17 @@ class MoodAdapter(private val moodList: List<MoodData>) :
     RecyclerView.Adapter<MoodAdapter.MoodViewHolder>() {
 
     private var selectedPosition = -1
+    private var isEnabled = true  // ✅ Tambahan untuk mengatur status aktif/tidak
     var onItemClick: ((MoodData) -> Unit)? = null
+
+    /**
+     * Fungsi publik untuk mengatur status aktif/tidak
+     * Ketika disabled: klik tidak berfungsi dan item jadi agak transparan
+     */
+    fun setEnabled(enabled: Boolean) {
+        isEnabled = enabled
+        notifyDataSetChanged()
+    }
 
     inner class MoodViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val cardMood: MaterialCardView = itemView.findViewById(R.id.card_mood)
@@ -36,56 +45,48 @@ class MoodAdapter(private val moodList: List<MoodData>) :
         val mood = moodList[position]
         val context = holder.itemView.context
 
-        // Set mood icon - menggunakan iconResId dari MoodData
+        // Set icon dan label
         holder.ivMood.setImageResource(mood.iconResId)
-
-        // Set mood label berdasarkan type
-        val moodLabel = when (mood.type) {
+        holder.tvMoodLabel.text = when (mood.type) {
             "sad" -> "Sedih"
             "angry" -> "Marah"
             "flat" -> "Datar"
             "happy" -> "Senang"
             else -> "Mood"
         }
-        holder.tvMoodLabel.text = moodLabel
 
-        // Handle selection state
+        // Status item terpilih
         val isSelected = position == selectedPosition
         if (isSelected) {
-            // Selected state
             holder.ivMoodCheck.visibility = View.VISIBLE
             holder.cardMood.cardElevation = 8f
             holder.cardMood.strokeWidth = 3
             holder.cardMood.strokeColor = ContextCompat.getColor(context, mood.borderColorResId)
-
-            // Animate scale
             holder.ivMood.animate().scaleX(1.1f).scaleY(1.1f).setDuration(200).start()
-
-            // Make emoji more prominent
             holder.ivMood.alpha = 1.0f
         } else {
-            // Normal state
             holder.ivMoodCheck.visibility = View.GONE
             holder.cardMood.cardElevation = 4f
             holder.cardMood.strokeWidth = 0
-
-            // Reset scale
             holder.ivMood.animate().scaleX(1.0f).scaleY(1.0f).setDuration(200).start()
-
-            // Slightly transparent emoji
             holder.ivMood.alpha = 0.85f
         }
 
-        // Click listener
+        // 🔒 Atur transparansi dan interaksi sesuai status enable/disable
+        holder.itemView.alpha = if (isEnabled) 1.0f else 0.5f
+        holder.cardMood.isClickable = isEnabled
+        holder.cardMood.isFocusable = isEnabled
+
+        // Klik item hanya jika aktif
         holder.cardMood.setOnClickListener {
+            if (!isEnabled) return@setOnClickListener
+
             val previousPosition = selectedPosition
             selectedPosition = holder.adapterPosition
 
-            // Notify changes for animation
             notifyItemChanged(previousPosition)
             notifyItemChanged(selectedPosition)
 
-            // Trigger callback
             onItemClick?.invoke(mood)
         }
     }

@@ -2,9 +2,11 @@ package com.example.suarasamind.app.forum
 
 import android.os.Bundle
 import android.widget.Toast
-import com.example.suarasamind.app.main.BaseActivity
+import androidx.core.content.ContextCompat
+import com.example.suarasamind.app.R
 import com.example.suarasamind.app.data.ForumPost
 import com.example.suarasamind.app.databinding.ActivityCreatePostBinding
+import com.example.suarasamind.app.main.BaseActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
 class CreatePostActivity : BaseActivity<ActivityCreatePostBinding>() {
@@ -22,22 +24,40 @@ class CreatePostActivity : BaseActivity<ActivityCreatePostBinding>() {
 
         fetchCurrentUser()
         setupListeners()
+
+        // Atur tampilan awal UI untuk switch saat activity pertama kali dibuat
+        updateAnonymousUI(binding.switchAnonymous.isChecked)
     }
 
     private fun setupListeners() {
-        // Tombol back di toolbar
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
-
-        // Tombol submit
         binding.btnSubmitPost.setOnClickListener {
             submitPost()
         }
-
-        // Tombol cancel
         binding.btnCancel.setOnClickListener {
             finish()
+        }
+
+        // PERUBAHAN: Tambahkan listener untuk mendeteksi perubahan pada switch
+        binding.switchAnonymous.setOnCheckedChangeListener { _, isChecked ->
+            updateAnonymousUI(isChecked)
+        }
+    }
+
+    // FUNGSI BARU: Untuk mengupdate UI berdasarkan status switch
+    private fun updateAnonymousUI(isAnonymous: Boolean) {
+        if (isAnonymous) {
+            // Saat mode Anonim AKTIF
+            binding.tvAnonymousStatus.text = "Mode anonim: AKTIF"
+            binding.cardAnonymous.strokeColor = ContextCompat.getColor(this, R.color.calm_blue)
+            binding.ivAnonymousIcon.setColorFilter(ContextCompat.getColor(this, R.color.calm_blue))
+        } else {
+            // Saat mode Anonim NONAKTIF
+            binding.tvAnonymousStatus.text = "Identitas sebagai ${currentUsername} akan ditampilkan"
+            binding.cardAnonymous.strokeColor = ContextCompat.getColor(this, R.color.text_super_light)
+            binding.ivAnonymousIcon.setColorFilter(ContextCompat.getColor(this, R.color.text_light))
         }
     }
 
@@ -48,6 +68,9 @@ class CreatePostActivity : BaseActivity<ActivityCreatePostBinding>() {
                 .addOnSuccessListener { document ->
                     if (document != null && document.exists()) {
                         currentUsername = document.getString("username") ?: "Pengguna"
+                        // Setelah username didapat, update UI lagi untuk menampilkan nama pengguna
+                        // jika mode anonim sedang nonaktif.
+                        updateAnonymousUI(binding.switchAnonymous.isChecked)
                     }
                 }
         }
@@ -59,7 +82,6 @@ class CreatePostActivity : BaseActivity<ActivityCreatePostBinding>() {
         val isAnonymous = binding.switchAnonymous.isChecked
         val authorId = firebaseAuth.currentUser?.uid
 
-        // Validasi input
         if (title.isEmpty()) {
             binding.tilPostTitle.error = "Judul tidak boleh kosong"
             return
@@ -86,7 +108,6 @@ class CreatePostActivity : BaseActivity<ActivityCreatePostBinding>() {
             return
         }
 
-        // Disable button saat proses upload
         binding.btnSubmitPost.isEnabled = false
         binding.btnSubmitPost.text = "Mengirim..."
 
@@ -107,9 +128,9 @@ class CreatePostActivity : BaseActivity<ActivityCreatePostBinding>() {
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Gagal membagikan cerita: ${e.message}", Toast.LENGTH_LONG).show()
-                // Re-enable button jika gagal
                 binding.btnSubmitPost.isEnabled = true
                 binding.btnSubmitPost.text = "Bagikan Cerita"
             }
     }
 }
+

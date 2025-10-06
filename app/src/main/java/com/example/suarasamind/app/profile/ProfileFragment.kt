@@ -1,23 +1,23 @@
 package com.example.suarasamind.app.profile
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.suarasamind.app.R
+import com.example.suarasamind.app.adapters.AvatarAdapter
 import com.example.suarasamind.app.auth.LoginActivity
 import com.example.suarasamind.app.databinding.FragmentProfileBinding
+import com.example.suarasamind.app.mood.MoodHistoryActivity
+
+// [TAMBAHAN] Import untuk DialogFragment Kebijakan Privasi
+import com.example.suarasamind.app.profile.PrivacyPolicyDialogFragment
 
 class ProfileFragment : Fragment() {
 
@@ -25,22 +25,6 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val profileViewModel: ProfileViewModel by viewModels()
-
-    private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-            if (isGranted) {
-                pickImageLauncher.launch("image/*")
-            } else {
-                Toast.makeText(requireContext(), "Izin akses galeri ditolak", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-    private val pickImageLauncher =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            uri?.let {
-                profileViewModel.uploadProfileImage(it)
-            }
-        }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
@@ -58,9 +42,21 @@ class ProfileFragment : Fragment() {
             user?.let {
                 binding.tvUserName.text = it.fullName
                 binding.tvUserEmail.text = it.email
+
+                val avatarIdString = it.avatarId
+                val placeholder = R.drawable.ic_profile
+                var resourceId = placeholder
+
+                if (avatarIdString.isNotEmpty()) {
+                    val foundId = resources.getIdentifier(avatarIdString, "drawable", requireContext().packageName)
+                    if (foundId != 0) {
+                        resourceId = foundId
+                    }
+                }
+
                 Glide.with(this)
-                    .load(it.profileImageUrl)
-                    .placeholder(R.drawable.ic_profile)
+                    .load(resourceId)
+                    .placeholder(placeholder)
                     .circleCrop()
                     .into(binding.ivProfilePicture)
             }
@@ -71,16 +67,9 @@ class ProfileFragment : Fragment() {
         profileViewModel.moodCount.observe(viewLifecycleOwner) { count ->
             binding.tvMoodCount.text = count.toString()
         }
-        profileViewModel.uploadStatus.observe(viewLifecycleOwner) { message ->
-            if (message.isNotEmpty()) {
-                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 
     private fun setupClickListeners() {
-        // PENYESUAIAN: Mengisi semua logika tombol yang sebelumnya kosong
-
         binding.btnLogout.setOnClickListener {
             profileViewModel.logout()
             val intent = Intent(requireActivity(), LoginActivity::class.java).apply {
@@ -101,25 +90,52 @@ class ProfileFragment : Fragment() {
         }
 
         binding.ivProfilePicture.setOnClickListener {
-            checkPermissionAndOpenGallery()
+            showAvatarSelectionDialog()
+        }
+
+        binding.btnMoodHistory.setOnClickListener {
+            startActivity(Intent(requireActivity(), MoodHistoryActivity::class.java))
+        }
+
+        binding.tvMoodCount.setOnClickListener {
+            startActivity(Intent(requireActivity(), MoodHistoryActivity::class.java))
+        }
+
+        // [TAMBAHAN] Click listener untuk tombol Kebijakan Privasi
+        binding.btnPrivacyPolicy.setOnClickListener {
+            openPrivacyPolicy()
         }
     }
 
-    private fun checkPermissionAndOpenGallery() {
-        val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            Manifest.permission.READ_MEDIA_IMAGES
-        } else {
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        }
+    // [TAMBAHAN] Fungsi untuk memanggil DialogFragment Kebijakan Privasi
+    private fun openPrivacyPolicy() {
+        PrivacyPolicyDialogFragment().show(childFragmentManager, "PrivacyPolicyDialog")
+    }
 
-        when {
-            ContextCompat.checkSelfPermission(requireContext(), permission) == PackageManager.PERMISSION_GRANTED -> {
-                pickImageLauncher.launch("image/*")
-            }
-            else -> {
-                requestPermissionLauncher.launch(permission)
-            }
+    private fun showAvatarSelectionDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_select_avatar, null)
+        val rvAvatars = dialogView.findViewById<RecyclerView>(R.id.rv_avatars)
+
+        val avatars = listOf(
+            R.drawable.avatar1,
+            R.drawable.avatar2,
+            R.drawable.avatar3,
+            R.drawable.avatar4,
+            R.drawable.avatar5,
+            R.drawable.avatar6
+        )
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        val adapter = AvatarAdapter(avatars) { selectedAvatarId ->
+            profileViewModel.updateAvatar(selectedAvatarId)
+            dialog.dismiss()
         }
+        rvAvatars.adapter = adapter
+
+        dialog.show()
     }
 
     override fun onDestroyView() {

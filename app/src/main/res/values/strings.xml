@@ -56,4 +56,33 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!-- Kebijakan Privasi Pengguna -->
+    <string name="privacy_policy_html"><![CDATA[
+        <b>Terakhir Diubah: 7 Oktober 2025</b>
+        <br/><br/>
+        Di Suarasa Mind, kami sangat menghargai privasi dan kepercayaan Anda. Kesejahteraan mental Anda adalah prioritas kami, dan itu termasuk melindungi data pribadi Anda.
+        <br/><br/>
+        <b>1. Informasi yang Kami Kumpulkan</b>
+        <br/>Kami mengumpulkan informasi berikut untuk menjalankan fitur aplikasi:
+        <br/>•   <b>Data Pendaftaran Akun:</b> Nama Lengkap, Alamat Email, dan Username Anda.
+        <br/>•   <b>Konten Jurnal Pribadi:</b> Judul, Isi Cerita, dan Mood yang Anda catat (bersifat privat).
+        <br/>•   <b>Catatan Mood Harian:</b> Jenis mood dan waktu saat dicatat.
+        <br/>•   <b>Konten Forum Diskusi:</b> Judul dan Isi Cerita yang Anda bagikan (bersifat publik).
+        <br/>•   <b>Pilihan Avatar:</b> Referensi avatar yang Anda pilih.
+        <br/><br/>
+        <b>2. Bagaimana Kami Menggunakan Informasi Anda</b>
+        <br/>Data Anda kami gunakan untuk menyediakan layanan inti, mempersonalisasi pengalaman, dan meningkatkan aplikasi. Kami <b>tidak akan pernah</b> menjual atau membagikan data pribadi Anda (seperti email dan isi jurnal) untuk tujuan pemasaran.
+        <br/><br/>
+        <b>3. Pembagian Informasi & Fitur Anonim</b>
+        <br/>Setiap cerita yang Anda bagikan di <b>Forum Diskusi</b> dapat dilihat oleh pengguna lain. Saat Anda memilih <b>‘Posting sebagai Anonim’</b>, kami akan menyembunyikan nama Anda, namun isi cerita tetap bersifat publik.
+        <br/><br/>
+        <b>4. Keamanan Data</b>
+        <br/>Kami berkomitmen melindungi data Anda menggunakan standar keamanan tinggi dari layanan Google Firebase.
+        <br/><br/>
+        <b>5. Hubungi Kami</b>
+        <br/>Jika ada pertanyaan, silakan hubungi kami di:<br/><b>kontak.suarasamind@gmail.com</b>
+        <br/><br/>
+        Terima kasih telah menjadi bagian dari komunitas Suarasa Mind.
+    ]]></string>
+
 </resources>

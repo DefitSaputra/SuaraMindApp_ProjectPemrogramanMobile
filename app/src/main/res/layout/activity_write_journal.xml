@@ -23,7 +23,8 @@
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/ic_close"
             app:title="Tulis Jurnal"
-            app:titleCentered="true">
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/TextAppearance.Suarasa.Headline2">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_save_journal"
@@ -31,8 +32,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginEnd="16dp"
-                android:text="Simpan" />
+                android:layout_marginEnd="8dp"
+                android:text="Simpan"
+                android:fontFamily="@font/nunito_bold"
+                android:textColor="@color/calm_blue"
+                android:textSize="15sp"/>
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -50,70 +54,255 @@
             android:orientation="vertical"
             android:padding="24dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Bagaimana perasaanmu hari ini?"
-                android:textAppearance="@style/TextAppearance.Suarasa.Headline2" />
-
-            <LinearLayout
+            <!-- Mood Selector Card -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:orientation="horizontal">
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="0dp"
+                app:cardBackgroundColor="@color/white">
 
-                <ImageView
-                    android:id="@+id/mood_happy"
-                    style="@style/Widget.Suarasa.MoodTracker"
-                    android:src="@drawable/emo_happy"
-                    android:contentDescription="Senang"/>
-                <ImageView
-                    android:id="@+id/mood_flat"
-                    style="@style/Widget.Suarasa.MoodTracker"
-                    android:src="@drawable/emo_flat"
-                    android:contentDescription="Datar"/>
-                <ImageView
-                    android:id="@+id/mood_sad"
-                    style="@style/Widget.Suarasa.MoodTracker"
-                    android:src="@drawable/emo_sad"
-                    android:contentDescription="Sedih"/>
-                <ImageView
-                    android:id="@+id/mood_angry"
-                    style="@style/Widget.Suarasa.MoodTracker"
-                    android:src="@drawable/emo_angry"
-                    android:contentDescription="Marah"/>
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
+                    <!-- Label dengan Icon -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_mood"
+                            app:tint="@color/calm_blue"
+                            android:contentDescription="Mood icon"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="Bagaimana perasaanmu hari ini?"
+                            android:fontFamily="@font/nunito_bold"
+                            android:textColor="@color/text_dark"
+                            android:textSize="16sp"/>
+
+                    </LinearLayout>
+
+                    <!-- Mood Selector -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="64dp"
+                                android:layout_height="64dp"
+                                app:cardCornerRadius="16dp"
+                                app:cardElevation="0dp"
+                                app:strokeWidth="2dp"
+                                app:strokeColor="@color/mood_happy_border"
+                                app:cardBackgroundColor="@color/mood_happy_bg">
+
+                                <ImageView
+                                    android:id="@+id/mood_happy"
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/emo_happy"
+                                    android:contentDescription="Senang"/>
+
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="Senang"
+                                android:fontFamily="@font/lato_regular"
+                                android:textColor="@color/text_light"
+                                android:textSize="12sp"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="64dp"
+                                android:layout_height="64dp"
+                                app:cardCornerRadius="16dp"
+                                app:cardElevation="0dp"
+                                app:strokeWidth="2dp"
+                                app:strokeColor="@color/mood_flat_border"
+                                app:cardBackgroundColor="@color/mood_flat_bg">
+
+                                <ImageView
+                                    android:id="@+id/mood_flat"
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/emo_flat"
+                                    android:contentDescription="Datar"/>
+
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="Biasa"
+                                android:fontFamily="@font/lato_regular"
+                                android:textColor="@color/text_light"
+                                android:textSize="12sp"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="64dp"
+                                android:layout_height="64dp"
+                                app:cardCornerRadius="16dp"
+                                app:cardElevation="0dp"
+                                app:strokeWidth="2dp"
+                                app:strokeColor="@color/mood_sad_border"
+                                app:cardBackgroundColor="@color/mood_sad_bg">
+
+                                <ImageView
+                                    android:id="@+id/mood_sad"
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/emo_sad"
+                                    android:contentDescription="Sedih"/>
+
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="Sedih"
+                                android:fontFamily="@font/lato_regular"
+                                android:textColor="@color/text_light"
+                                android:textSize="12sp"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="64dp"
+                                android:layout_height="64dp"
+                                app:cardCornerRadius="16dp"
+                                app:cardElevation="0dp"
+                                app:strokeWidth="2dp"
+                                app:strokeColor="@color/mood_angry_border"
+                                app:cardBackgroundColor="@color/mood_angry_bg">
+
+                                <ImageView
+                                    android:id="@+id/mood_angry"
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/emo_angry"
+                                    android:contentDescription="Marah"/>
+
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="Marah"
+                                android:fontFamily="@font/lato_regular"
+                                android:textColor="@color/text_light"
+                                android:textSize="12sp"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Title Input -->
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/Widget.Suarasa.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="20dp"
                 android:hint="Judul Jurnal..."
-                app:boxStrokeColor="@color/calm_blue">
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_journal_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textCapSentences" />
+                    android:inputType="textCapSentences"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
+                    android:fontFamily="@font/lato_regular"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Content Input -->
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/Widget.Suarasa.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:hint="Tuliskan ceritamu di sini..."
-                app:boxStrokeColor="@color/calm_blue">
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_journal_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="top"
                     android:inputType="textMultiLine|textCapSentences"
-                    android:minHeight="250dp" />
+                    android:minHeight="280dp"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
+                    android:fontFamily="@font/lato_regular"
+                    android:lineSpacingMultiplier="1.4"/>
             </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

@@ -89,7 +89,7 @@ class JournalDetailActivity : BaseActivity<ActivityJournalDetailBinding>() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.detail_menu, menu)
+        menuInflater.inflate(R.menu.detail_post_menu, menu)
         return true
     }
 

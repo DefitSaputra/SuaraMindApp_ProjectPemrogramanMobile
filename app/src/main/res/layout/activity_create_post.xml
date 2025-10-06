@@ -28,11 +28,6 @@
         android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!--
-          PERUBAHAN DI SINI:
-          Atribut 'padding' yang tadinya "24dp" untuk semua sisi, saya pisah.
-          'paddingBottom' saya perbesar menjadi "32dp" untuk memberi ruang ekstra di bagian bawah.
-        -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -150,12 +145,13 @@
 
             <!-- Anonymous Switch -->
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_anonymous"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                app:cardCornerRadius="12dp"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                app:strokeWidth="1dp"
+                app:strokeWidth="1.5dp"
                 app:strokeColor="@color/text_super_light"
                 app:cardBackgroundColor="@color/white">
 
@@ -167,6 +163,7 @@
                     android:gravity="center_vertical">
 
                     <ImageView
+                        android:id="@+id/iv_anonymous_icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_incognito"
@@ -189,23 +186,24 @@
                             android:textSize="14sp"/>
 
                         <TextView
+                            android:id="@+id/tv_anonymous_status"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Identitasmu akan disembunyikan"
+                            android:text="Mode anonim: NONAKTIF"
                             android:fontFamily="@font/lato_regular"
                             android:textColor="@color/text_light"
                             android:textSize="12sp"/>
 
                     </LinearLayout>
 
+                    <!-- PERUBAHAN: Menggunakan color selector untuk track -->
                     <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/switch_anonymous"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:thumbTint="@color/white"
-                        app:trackTint="@color/text_super_light"
-                        app:trackTintMode="src_in"/>
+                        app:trackTint="@color/switch_track_selector"/>
 
                 </LinearLayout>
 
@@ -238,3 +236,4 @@
     </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+

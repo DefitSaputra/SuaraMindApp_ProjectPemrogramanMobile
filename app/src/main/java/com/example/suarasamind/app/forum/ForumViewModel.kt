@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.suarasamind.app.data.ForumPost
+import com.example.suarasamind.app.data.ForumPost // Pastikan lokasi data class ini benar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -50,27 +50,22 @@ class ForumViewModel : ViewModel() {
 
     fun toggleSupport(post: ForumPost) {
         if (currentUserId.isEmpty()) return
-        val postRef = firestore.collection("posts").document(post.id)
-        firestore.runTransaction { transaction ->
-            val snapshot = transaction.get(postRef)
-            val forumPost = snapshot.toObject<ForumPost>() ?: return@runTransaction
-            val supporters = forumPost.supporters.toMutableList()
-            if (supporters.contains(currentUserId)) {
-                transaction.update(postRef, "supportCount", FieldValue.increment(-1))
-                transaction.update(postRef, "supporters", FieldValue.arrayRemove(currentUserId))
-            } else {
-                transaction.update(postRef, "supportCount", FieldValue.increment(1))
-                transaction.update(postRef, "supporters", FieldValue.arrayUnion(currentUserId))
-            }
-        }.addOnFailureListener { e -> Log.w("ForumViewModel", "Error toggling support", e) }
-    }
 
-    fun refreshPosts() {
-        listenToAllPosts()
+        val postRef = firestore.collection("posts").document(post.id)
+
+        // Cek apakah user sudah support atau belum
+        if (post.supporters.contains(currentUserId)) {
+            // Jika sudah, hapus support (unlike)
+            postRef.update("supporters", FieldValue.arrayRemove(currentUserId))
+        } else {
+            // Jika belum, tambahkan support (like)
+            postRef.update("supporters", FieldValue.arrayUnion(currentUserId))
+        }
     }
 
     override fun onCleared() {
         super.onCleared()
+        // Hentikan listener saat ViewModel dihancurkan untuk menghindari memory leak
         postsListener?.remove()
     }
 }

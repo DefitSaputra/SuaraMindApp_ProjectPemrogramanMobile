@@ -52,7 +52,11 @@ class HomeFragment : Fragment() {
 
     private fun setupUI() {
         setupMoodTracker()
-        binding.rvArticles.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rvArticles.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
 
         val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
         forumAdapter = ForumAdapter(mutableListOf(), currentUserId)
@@ -61,9 +65,8 @@ class HomeFragment : Fragment() {
         binding.rvForum.adapter = forumAdapter
 
         forumAdapter.onItemClick = {
-            // PERUBAHAN KRUSIAL DI SINI:
-            // Menggunakan ID baru 'bottom_nav_view' yang Anda definisikan.
-            val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view)
+            val bottomNav =
+                requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view)
             bottomNav.selectedItemId = R.id.forumFragment
         }
 
@@ -71,15 +74,18 @@ class HomeFragment : Fragment() {
             homeViewModel.toggleSupport(post)
         }
 
-        val todayDate = SimpleDateFormat("EEEE, dd MMM yyyy", Locale("id", "ID")).format(Date())
+        val todayDate =
+            SimpleDateFormat("EEEE, dd MMM yyyy", Locale("id", "ID")).format(Date())
         binding.tvDate.text = todayDate
     }
 
     private fun observeViewModel() {
+        // 🔹 Observasi Greeting
         homeViewModel.greeting.observe(viewLifecycleOwner) { greetingText ->
             binding.tvGreeting.text = greetingText
         }
 
+        // 🔹 Observasi Artikel
         homeViewModel.articles.observe(viewLifecycleOwner) { articles ->
             val contentAdapter = ContentAdapter(articles)
             binding.rvArticles.adapter = contentAdapter
@@ -89,31 +95,80 @@ class HomeFragment : Fragment() {
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(article.articleUrl))
                         startActivity(intent)
                     } catch (e: Exception) {
-                        Toast.makeText(requireContext(), "Tidak bisa membuka link", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            "Tidak bisa membuka link",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 } else {
-                    Toast.makeText(requireContext(), "Link artikel tidak tersedia", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Link artikel tidak tersedia",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
 
+        // 🔹 Observasi Forum Posts
         homeViewModel.forumPosts.observe(viewLifecycleOwner) { posts ->
             forumAdapter.updatePosts(posts)
+        }
+
+        // 🔹 Observasi Mood Hari Ini
+        homeViewModel.hasMoodToday.observe(viewLifecycleOwner) { hasMood ->
+            if (hasMood) {
+                // Disable mood tracker atau kasih visual feedback
+                moodAdapter.setEnabled(false)
+                binding.tvMoodPrompt.text = "Kamu sudah input mood hari ini ✓"
+            } else {
+                moodAdapter.setEnabled(true)
+                binding.tvMoodPrompt.text = "Bagaimana Perasaanmu?"
+            }
         }
     }
 
     private fun setupMoodTracker() {
         val moodList = listOf(
-            MoodData(R.drawable.emo_sad, R.color.mood_sad_border, R.color.mood_sad_bg, "Tidak apa-apa, Suarasa Mind ada untukmu. 😊", "sad"),
-            MoodData(R.drawable.emo_angry, R.color.mood_angry_border, R.color.mood_angry_bg, "Wah, sepertinya butuh sedikit ketenangan. Kami di sini!", "angry"),
-            MoodData(R.drawable.emo_flat, R.color.mood_flat_border, R.color.mood_flat_bg, "Kadang begini, mari cari inspirasi bersama! ✨", "flat"),
-            MoodData(R.drawable.emo_happy, R.color.mood_happy_border, R.color.mood_happy_bg, "Senyummu menular! Tetap semangat ya! 🎉", "happy")
+            MoodData(
+                R.drawable.emo_sad,
+                R.color.mood_sad_border,
+                R.color.mood_sad_bg,
+                "Tidak apa-apa, Suarasa Mind ada untukmu. 😊",
+                "sad"
+            ),
+            MoodData(
+                R.drawable.emo_angry,
+                R.color.mood_angry_border,
+                R.color.mood_angry_bg,
+                "Wah, sepertinya butuh sedikit ketenangan. Kami di sini!",
+                "angry"
+            ),
+            MoodData(
+                R.drawable.emo_flat,
+                R.color.mood_flat_border,
+                R.color.mood_flat_bg,
+                "Kadang begini, mari cari inspirasi bersama! ✨",
+                "flat"
+            ),
+            MoodData(
+                R.drawable.emo_happy,
+                R.color.mood_happy_border,
+                R.color.mood_happy_bg,
+                "Senyummu menular! Tetap semangat ya! 🎉",
+                "happy"
+            )
         )
+
         moodAdapter = MoodAdapter(moodList)
         binding.rvMoodTracker.apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = moodAdapter
         }
+
+        // Klik mood -> simpan ke Firestore
         moodAdapter.onItemClick = { mood ->
             Toast.makeText(requireContext(), mood.message, Toast.LENGTH_SHORT).show()
             homeViewModel.saveMood(mood.type)
@@ -129,12 +184,14 @@ class HomeFragment : Fragment() {
                 R.id.action_logout -> {
                     FirebaseAuth.getInstance().signOut()
                     val intent = Intent(requireActivity(), LoginActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        flags =
+                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     }
                     startActivity(intent)
                     requireActivity().finish()
                     true
                 }
+
                 else -> false
             }
         }
@@ -146,4 +203,3 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 }
-

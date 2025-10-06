@@ -6,13 +6,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.suarasamind.app.data.ContentData
 import com.example.suarasamind.app.data.ForumPost
+import com.example.suarasamind.app.data.MoodEntry
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.toObject
-import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -31,21 +33,29 @@ class HomeViewModel : ViewModel() {
     private val _forumPosts = MutableLiveData<List<ForumPost>>()
     val forumPosts: LiveData<List<ForumPost>> = _forumPosts
 
+    private val _hasMoodToday = MutableLiveData<Boolean>()
+    val hasMoodToday: LiveData<Boolean> = _hasMoodToday
+
     private var postsListener: ListenerRegistration? = null
     private var articlesListener: ListenerRegistration? = null
+    private var moodTodayListener: ListenerRegistration? = null
 
     init {
         loadUserProfile()
         listenToArticles()
         listenToPosts()
+        checkMoodToday()
     }
 
     private fun loadUserProfile() {
-        if (currentUserId.isEmpty()) return
+        if (currentUserId.isEmpty()) {
+            _greeting.value = "Selamat Datang,\nSobat!"
+            return
+        }
         firestore.collection("users").document(currentUserId).get()
             .addOnSuccessListener { document ->
-                val fullName = document.getString("fullName") ?: "Sobat"
-                val hour = SimpleDateFormat("HH", Locale.getDefault()).format(Date()).toInt()
+                val fullName = document.getString("fullName")?.trim() ?: "Sobat"
+                val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
                 val greetingPrefix = when (hour) {
                     in 5..11 -> "Selamat Pagi,"
                     in 12..15 -> "Selamat Siang,"
@@ -59,17 +69,58 @@ class HomeViewModel : ViewModel() {
             }
     }
 
+    private fun checkMoodToday() {
+        if (currentUserId.isEmpty()) return
+
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        val startOfDay = calendar.time
+
+        calendar.add(Calendar.DAY_OF_MONTH, 1)
+        val endOfDay = calendar.time
+
+        moodTodayListener = firestore.collection("users").document(currentUserId)
+            .collection("moods")
+            .whereGreaterThanOrEqualTo("timestamp", startOfDay)
+            .whereLessThan("timestamp", endOfDay)
+            .addSnapshotListener { snapshots, error ->
+                if (error != null) {
+                    _hasMoodToday.value = false
+                    Log.w("HomeViewModel", "Error checking mood today", error)
+                    return@addSnapshotListener
+                }
+                _hasMoodToday.value = snapshots != null && !snapshots.isEmpty
+            }
+    }
+
+    fun saveMood(moodType: String) {
+        if (currentUserId.isEmpty() || _hasMoodToday.value == true) return
+
+        val moodEntry = MoodEntry(type = moodType, timestamp = Timestamp.now().toDate())
+
+        firestore.collection("users").document(currentUserId)
+            .collection("moods")
+            .add(moodEntry)
+            .addOnSuccessListener {
+                Log.d("HomeViewModel", "Mood '$moodType' saved successfully.")
+            }
+            .addOnFailureListener { e ->
+                Log.w("HomeViewModel", "Error saving mood", e)
+            }
+    }
+
+    // ... (Fungsi listenToArticles, listenToPosts, toggleSupport sudah OK)
+
     private fun listenToArticles() {
         articlesListener = firestore.collection("articles").addSnapshotListener { snapshots, error ->
             if (error != null) {
                 Log.w("HomeViewModel", "Error getting articles", error)
-                _articles.value = emptyList()
                 return@addSnapshotListener
             }
-            if (snapshots != null) {
-                val articleList = snapshots.map { it.toObject<ContentData>() }
-                _articles.value = articleList
-            }
+            _articles.value = snapshots?.map { it.toObject<ContentData>() } ?: emptyList()
         }
     }
 
@@ -80,15 +131,11 @@ class HomeViewModel : ViewModel() {
             .addSnapshotListener { snapshots, error ->
                 if (error != null) {
                     Log.w("HomeViewModel", "Error getting posts", error)
-                    _forumPosts.value = emptyList()
                     return@addSnapshotListener
                 }
-                if (snapshots != null) {
-                    val postList = snapshots.map { document ->
-                        document.toObject(ForumPost::class.java).apply { id = document.id }
-                    }
-                    _forumPosts.value = postList
-                }
+                _forumPosts.value = snapshots?.map { document ->
+                    document.toObject(ForumPost::class.java).apply { id = document.id }
+                } ?: emptyList()
             }
     }
 
@@ -97,8 +144,7 @@ class HomeViewModel : ViewModel() {
         val postRef = firestore.collection("posts").document(post.id)
         firestore.runTransaction { transaction ->
             val snapshot = transaction.get(postRef)
-            val forumPost = snapshot.toObject<ForumPost>() ?: return@runTransaction
-            val supporters = forumPost.supporters.toMutableList()
+            val supporters = snapshot.get("supporters") as? List<String> ?: emptyList()
             if (supporters.contains(currentUserId)) {
                 transaction.update(postRef, "supportCount", FieldValue.increment(-1))
                 transaction.update(postRef, "supporters", FieldValue.arrayRemove(currentUserId))
@@ -109,27 +155,10 @@ class HomeViewModel : ViewModel() {
         }.addOnFailureListener { e -> Log.w("HomeViewModel", "Error toggling support", e) }
     }
 
-    fun saveMood(moodType: String) {
-        if (currentUserId.isEmpty()) return
-
-        val moodData = hashMapOf(
-            "type" to moodType,
-            "timestamp" to System.currentTimeMillis()
-        )
-        firestore.collection("users").document(currentUserId)
-            .collection("moods")
-            .add(moodData)
-            .addOnSuccessListener {
-                Log.d("HomeViewModel", "Mood '$moodType' saved successfully.")
-            }
-            .addOnFailureListener { e ->
-                Log.w("HomeViewModel", "Error saving mood", e)
-            }
-    }
-
     override fun onCleared() {
         super.onCleared()
         postsListener?.remove()
         articlesListener?.remove()
+        moodTodayListener?.remove()
     }
 }

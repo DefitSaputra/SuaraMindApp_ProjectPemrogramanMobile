@@ -5,14 +5,15 @@ import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.suarasamind.app.main.BaseActivity
 import com.example.suarasamind.app.adapters.CommentAdapter
 import com.example.suarasamind.app.adapters.PostDetailHeaderAdapter
 import com.example.suarasamind.app.data.Comment
 import com.example.suarasamind.app.data.ForumPost
 import com.example.suarasamind.app.databinding.ActivityPostDetailBinding
+import com.example.suarasamind.app.main.BaseActivity
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.toObject
 
@@ -28,6 +29,9 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
     private lateinit var concatAdapter: ConcatAdapter
 
     private val commentList = mutableListOf<Comment>()
+
+    private var postListener: ListenerRegistration? = null
+    private var commentsListener: ListenerRegistration? = null
 
     override fun inflateBinding(): ActivityPostDetailBinding {
         return ActivityPostDetailBinding.inflate(layoutInflater)
@@ -46,10 +50,8 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
             return
         }
 
-        fetchCurrentUser()
         setupRecyclerView()
-        listenToPostDetails()
-        listenToComments()
+        fetchCurrentUser()
 
         binding.toolbar.setNavigationOnClickListener {
             finish()
@@ -63,6 +65,18 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
                 Toast.makeText(this, "Komentar tidak boleh kosong", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        listenToPostDetails()
+        listenToComments()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        postListener?.remove()
+        commentsListener?.remove()
     }
 
     private fun fetchCurrentUser() {
@@ -92,7 +106,7 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
     }
 
     private fun listenToPostDetails() {
-        firestore.collection("posts").document(postId)
+        postListener = firestore.collection("posts").document(postId)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     Toast.makeText(this, "Gagal memuat detail post: ${error.message}", Toast.LENGTH_SHORT).show()
@@ -105,12 +119,15 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
                         it.id = snapshot.id
                         headerAdapter.setPost(it)
                     }
+                } else {
+                    Toast.makeText(this, "Cerita ini telah dihapus.", Toast.LENGTH_SHORT).show()
+                    finish()
                 }
             }
     }
 
     private fun listenToComments() {
-        firestore.collection("posts").document(postId)
+        commentsListener = firestore.collection("posts").document(postId)
             .collection("comments")
             .orderBy("timestamp", Query.Direction.ASCENDING)
             .addSnapshotListener { snapshots, error ->
@@ -120,7 +137,7 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
                 }
 
                 if (snapshots != null) {
-                    val isFirstLoad = commentList.isEmpty()
+                    val previousCount = commentList.size
                     commentList.clear()
                     for (document in snapshots) {
                         val comment = document.toObject(Comment::class.java)
@@ -129,33 +146,27 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
                     }
                     commentAdapter.notifyDataSetChanged()
 
-                    if(isFirstLoad) {
-                        binding.rvPostDetail.post { scrollToBottom() }
-                    } else {
-                        binding.rvPostDetail.postDelayed({ scrollToBottom() }, 100)
+                    if (commentList.size > previousCount) {
+                        scrollToBottom()
                     }
                 }
             }
     }
 
-    private fun addComment(commentText: String) {
-        val comment = Comment(
-            authorId = currentUserId,
-            authorUsername = currentUsername,
-            content = commentText
-        )
+    private fun scrollToBottom() {
+        if (concatAdapter.itemCount > 0) {
+            binding.rvPostDetail.post {
+                binding.rvPostDetail.smoothScrollToPosition(concatAdapter.itemCount - 1)
+            }
+        }
+    }
 
-        firestore.collection("posts").document(postId)
-            .collection("comments")
-            .add(comment)
+    private fun addComment(commentText: String) {
+        val comment = Comment(authorId = currentUserId, authorUsername = currentUsername, content = commentText)
+        firestore.collection("posts").document(postId).collection("comments").add(comment)
             .addOnSuccessListener {
-                firestore.collection("posts").document(postId)
-                    .update("commentCount", FieldValue.increment(1))
+                firestore.collection("posts").document(postId).update("commentCount", FieldValue.increment(1))
                 binding.etComment.text.clear()
-                Toast.makeText(this, "Komentar berhasil ditambahkan", Toast.LENGTH_SHORT).show()
-                binding.rvPostDetail.postDelayed({
-                    scrollToBottom()
-                }, 100)
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Gagal menambah komentar: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -167,7 +178,6 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
         firestore.runTransaction { transaction ->
             val snapshot = transaction.get(postRef)
             val post = snapshot.toObject<ForumPost>() ?: return@runTransaction
-
             val supporters = post.supporters.toMutableList()
             if (supporters.contains(currentUserId)) {
                 transaction.update(postRef, "supportCount", FieldValue.increment(-1))
@@ -181,10 +191,5 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>() {
             Toast.makeText(this, "Gagal memberikan dukungan", Toast.LENGTH_SHORT).show()
         }
     }
-
-    private fun scrollToBottom() {
-        if (concatAdapter.itemCount > 0) {
-            binding.rvPostDetail.smoothScrollToPosition(concatAdapter.itemCount - 1)
-        }
-    }
 }
+
