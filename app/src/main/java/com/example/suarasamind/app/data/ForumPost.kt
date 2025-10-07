@@ -13,6 +13,6 @@ data class ForumPost(
     val timestamp: Date? = null,
     var commentCount: Long = 0,
     var supportCount: Long = 0,
-    val supporters: List<String> = emptyList() // Daftar UID yang sudah memberi dukungan
+    val supporters: List<String> = emptyList()
 )
 

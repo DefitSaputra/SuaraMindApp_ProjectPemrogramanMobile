@@ -112,8 +112,6 @@ class HomeViewModel : ViewModel() {
             }
     }
 
-    // ... (Fungsi listenToArticles, listenToPosts, toggleSupport sudah OK)
-
     private fun listenToArticles() {
         articlesListener = firestore.collection("articles").addSnapshotListener { snapshots, error ->
             if (error != null) {

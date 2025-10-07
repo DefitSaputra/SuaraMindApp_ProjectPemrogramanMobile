@@ -29,7 +29,6 @@ class CalendarAdapter : ListAdapter<CalendarDay, CalendarAdapter.ViewHolder>(Dif
     inner class ViewHolder(private val binding: ItemCalendarDayBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(day: CalendarDay) {
             if (day.dayNumber == 0) {
-                // Hari kosong untuk alignment
                 binding.root.visibility = View.INVISIBLE
                 binding.root.isClickable = false
             } else {
@@ -45,7 +44,7 @@ class CalendarAdapter : ListAdapter<CalendarDay, CalendarAdapter.ViewHolder>(Dif
                         "sad" -> R.drawable.emo_sad
                         "angry" -> R.drawable.emo_angry
                         "flat" -> R.drawable.emo_flat
-                        else -> 0 // Sebaiknya ada ikon default
+                        else -> 0
                     }
                     if (moodIcon != 0) binding.ivMoodIcon.setImageResource(moodIcon)
                 } else {
@@ -73,7 +72,6 @@ class CalendarAdapter : ListAdapter<CalendarDay, CalendarAdapter.ViewHolder>(Dif
 
     class DiffCallback : DiffUtil.ItemCallback<CalendarDay>() {
         override fun areItemsTheSame(oldItem: CalendarDay, newItem: CalendarDay): Boolean {
-            // Kita perlu ID unik, tapi date bisa jadi null. Kombinasi dayNumber dan date cukup baik.
             return oldItem.dayNumber == newItem.dayNumber && oldItem.date == newItem.date
         }
 

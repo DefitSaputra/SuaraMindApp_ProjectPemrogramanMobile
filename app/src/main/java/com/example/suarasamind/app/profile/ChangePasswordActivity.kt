@@ -57,7 +57,6 @@ class ChangePasswordActivity : BaseActivity<ActivityChangePasswordBinding>() {
         val credential = EmailAuthProvider.getCredential(user.email!!, currentPassword)
         user.reauthenticate(credential)
             .addOnSuccessListener {
-                // Langkah 2: Jika re-autentikasi berhasil, baru update password
                 user.updatePassword(newPassword)
                     .addOnSuccessListener {
                         Toast.makeText(this, "Password berhasil diperbarui", Toast.LENGTH_SHORT).show()

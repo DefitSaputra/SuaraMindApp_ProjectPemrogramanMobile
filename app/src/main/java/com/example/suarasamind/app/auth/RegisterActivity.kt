@@ -42,14 +42,12 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun registerUser() {
-        // Ambil semua data dari form
         val fullName = binding.etFullname.text.toString().trim()
         val email = binding.etEmail.text.toString().trim()
         val username = binding.etUsername.text.toString().trim()
         val password = binding.etPassword.text.toString().trim()
         val confirmPassword = binding.etConfirmPassword.text.toString().trim()
 
-        // Validasi input
         if (fullName.isEmpty() || email.isEmpty() || username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             Toast.makeText(this, "Semua kolom harus diisi", Toast.LENGTH_SHORT).show()
             return
@@ -60,14 +58,11 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
-        // Buat user baru di Firebase Authentication
         firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // Jika registrasi auth berhasil, simpan data tambahan ke Firestore
                     saveUserDataToFirestore(fullName, username, email)
                 } else {
-                    // Jika registrasi gagal, tampilkan pesan error
                     Toast.makeText(this, "Registrasi gagal: ${task.exception?.message}", Toast.LENGTH_LONG).show()
                 }
             }
@@ -87,9 +82,8 @@ class RegisterActivity : AppCompatActivity() {
                 .set(userMap)
                 .addOnSuccessListener {
                     Toast.makeText(this, "Akun berhasil dibuat!", Toast.LENGTH_SHORT).show()
-                    // Arahkan ke halaman Login setelah sukses
                     startActivity(Intent(this, LoginActivity::class.java))
-                    finishAffinity() // Membersihkan semua activity sebelumnya
+                    finishAffinity()
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(this, "Gagal menyimpan data pengguna: ${e.message}", Toast.LENGTH_SHORT).show()

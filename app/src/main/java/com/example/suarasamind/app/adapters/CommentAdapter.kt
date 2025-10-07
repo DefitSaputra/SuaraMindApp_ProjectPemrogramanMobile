@@ -18,7 +18,6 @@ class CommentAdapter(private val commentList: List<Comment>) :
         val avatar: ImageView = view.findViewById(R.id.iv_comment_avatar)
         val author: TextView = view.findViewById(R.id.tv_comment_author)
         val content: TextView = view.findViewById(R.id.tv_comment_content)
-        // Diubah dari 'date' dan 'R.id.tv_comment_date'
         val time: TextView = view.findViewById(R.id.tv_comment_time)
     }
 
@@ -34,10 +33,8 @@ class CommentAdapter(private val commentList: List<Comment>) :
         holder.author.text = comment.authorUsername
         holder.content.text = comment.content
 
-        // Format tanggal
         comment.timestamp?.let { timestamp ->
             val sdf = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
-            // Variabel disesuaikan
             holder.time.text = sdf.format(timestamp)
         }
 

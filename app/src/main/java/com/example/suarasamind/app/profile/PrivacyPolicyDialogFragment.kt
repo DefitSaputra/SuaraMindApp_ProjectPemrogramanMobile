@@ -23,11 +23,8 @@ class PrivacyPolicyDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Set teks kebijakan dari strings.xml dan render HTML-nya
         binding.tvPolicyContent.text = Html.fromHtml(getString(R.string.privacy_policy_html), Html.FROM_HTML_MODE_COMPACT)
         binding.tvPolicyContent.movementMethod = LinkMovementMethod.getInstance() // Agar link bisa diklik jika ada
-
-        // Set listener untuk tombol tutup
         binding.btnClose.setOnClickListener {
             dismiss()
         }
@@ -35,9 +32,7 @@ class PrivacyPolicyDialogFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        // Atur ukuran dialog
         dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        // Atur background dialog menjadi transparan agar background custom kita terlihat
         dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
     }
 

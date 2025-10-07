@@ -15,11 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
-    // private lateinit var navController: NavController // <-- BARIS INI SUDAH DIHAPUS
-
     private lateinit var appBarConfiguration: AppBarConfiguration
-
-    // Kita buat navOptions menjadi properti agar bisa dipakai ulang
     private val navOptions by lazy {
         navOptions {
             anim {
@@ -46,17 +42,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
 
-        // Baris ini sekarang akan mengisi variabel navController dari BaseActivity
         navController = navHostFragment.navController
 
-        // Definisikan destinasi level atas (yang ada di Bottom Nav & Drawer)
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.homeFragment, R.id.forumFragment, R.id.journalFragment, R.id.profileFragment
             ), binding.drawerLayout // Hubungkan dengan DrawerLayout
         )
-
-        // Panggil kedua fungsi setup
         setupBottomNavWithFadeAnimation()
         setupNavigationDrawer()
     }
@@ -66,12 +58,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             if (item.itemId == navController.currentDestination?.id) {
                 return@setOnItemSelectedListener false
             }
-            // Gunakan navOptions yang sudah kita buat
             navController.navigate(item.itemId, null, navOptions)
             true
         }
-
-        // Listener ini tetap penting untuk sinkronisasi state
         navController.addOnDestinationChangedListener { _, destination, _ ->
             binding.bottomNavView.menu.findItem(destination.id)?.isChecked = true
         }

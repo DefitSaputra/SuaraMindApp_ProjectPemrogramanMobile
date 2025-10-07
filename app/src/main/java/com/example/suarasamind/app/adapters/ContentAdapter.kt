@@ -20,7 +20,6 @@ class ContentAdapter(private val contentList: List<ContentData>) :
         val contentSnippet: TextView = view.findViewById(R.id.tv_content_snippet)
 
         init {
-            // Set click listener untuk seluruh item
             itemView.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
@@ -42,7 +41,6 @@ class ContentAdapter(private val contentList: List<ContentData>) :
         holder.contentTitle.text = item.title
         holder.contentSnippet.text = item.content
 
-        // Load gambar menggunakan Glide
         Glide.with(holder.itemView.context)
             .load(item.imageUrl)
             .placeholder(R.drawable.ic_article_placeholder)

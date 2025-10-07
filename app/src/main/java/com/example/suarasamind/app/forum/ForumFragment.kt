@@ -43,7 +43,6 @@ class ForumFragment : Fragment() {
 
     private fun setupUI() {
         val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-        // PERUBAHAN: Adapter dibuat sekali di sini dengan list kosong
         forumAdapter = ForumAdapter(mutableListOf(), currentUserId)
 
         binding.rvForumPosts.apply {
@@ -51,7 +50,6 @@ class ForumFragment : Fragment() {
             adapter = forumAdapter
         }
 
-        // PERUBAHAN: Listener juga cukup di-set sekali di sini
         forumAdapter.onItemClick = { post ->
             val intent = Intent(requireActivity(), PostDetailActivity::class.java)
             intent.putExtra("POST_ID", post.id)
@@ -65,7 +63,6 @@ class ForumFragment : Fragment() {
 
     private fun observeViewModel() {
         forumViewModel.posts.observe(viewLifecycleOwner) { postList ->
-            // PERUBAHAN: Tidak membuat adapter baru, hanya meng-update datanya
             forumAdapter.updatePosts(postList)
         }
     }

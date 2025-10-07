@@ -15,8 +15,6 @@ import com.example.suarasamind.app.adapters.AvatarAdapter
 import com.example.suarasamind.app.auth.LoginActivity
 import com.example.suarasamind.app.databinding.FragmentProfileBinding
 import com.example.suarasamind.app.mood.MoodHistoryActivity
-
-// [TAMBAHAN] Import untuk DialogFragment Kebijakan Privasi
 import com.example.suarasamind.app.profile.PrivacyPolicyDialogFragment
 
 class ProfileFragment : Fragment() {
@@ -100,14 +98,11 @@ class ProfileFragment : Fragment() {
         binding.tvMoodCount.setOnClickListener {
             startActivity(Intent(requireActivity(), MoodHistoryActivity::class.java))
         }
-
-        // [TAMBAHAN] Click listener untuk tombol Kebijakan Privasi
         binding.btnPrivacyPolicy.setOnClickListener {
             openPrivacyPolicy()
         }
     }
 
-    // [TAMBAHAN] Fungsi untuk memanggil DialogFragment Kebijakan Privasi
     private fun openPrivacyPolicy() {
         PrivacyPolicyDialogFragment().show(childFragmentManager, "PrivacyPolicyDialog")
     }

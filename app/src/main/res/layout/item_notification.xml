@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <ImageView
+        android:id="@+id/iv_notification_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/ic_notification"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/calm_blue" />
+
+    <TextView
+        android:id="@+id/tv_notification_message"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:fontFamily="@font/lato_regular"
+        android:textColor="@color/text_dark"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_notification_icon"
+        app:layout_constraintTop_toTopOf="@id/iv_notification_icon"
+        tools:text="Aronim memberikan dukungan pada cerita Anda: 'Ketika Dunia Terasa Terlalu Cepat'" />
+
+    <TextView
+        android:id="@+id/tv_notification_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:fontFamily="@font/lato_regular"
+        android:textColor="@color/text_light"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@id/tv_notification_message"
+        app:layout_constraintTop_toBottomOf="@id/tv_notification_message"
+        tools:text="5 menit yang lalu" />
+
+    <View
+        android:id="@+id/view_unread_indicator"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:background="@drawable/bg_unread_dot"
+        app:layout_constraintBottom_toBottomOf="@id/iv_notification_icon"
+        app:layout_constraintEnd_toEndOf="@id/iv_notification_icon"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

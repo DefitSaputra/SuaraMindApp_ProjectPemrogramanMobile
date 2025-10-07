@@ -32,8 +32,6 @@ class MoodHistoryActivity : BaseActivity<ActivityMoodHistoryBinding>() {
         setupAdapters()
         setupCalendarNav()
         observeViewModel()
-
-        // Load data untuk bulan dan tahun saat ini
         loadMoodsForCurrentMonth()
     }
 
@@ -49,7 +47,6 @@ class MoodHistoryActivity : BaseActivity<ActivityMoodHistoryBinding>() {
     }
 
     private fun setupAdapters() {
-        // Setup Calendar Adapter
         calendarAdapter = CalendarAdapter().apply {
             onDateClick = { date ->
                 moodHistoryViewModel.selectDate(date)
@@ -58,11 +55,9 @@ class MoodHistoryActivity : BaseActivity<ActivityMoodHistoryBinding>() {
         binding.rvCalendar.apply {
             layoutManager = GridLayoutManager(this@MoodHistoryActivity, 7)
             adapter = calendarAdapter
-            // Cegah itemAnimator berkedip saat item dipilih
             itemAnimator = null
         }
 
-        // Setup Mood History Adapter
         moodHistoryAdapter = MoodHistoryAdapter()
         binding.rvMoodList.apply {
             layoutManager = LinearLayoutManager(this@MoodHistoryActivity)

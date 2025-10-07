@@ -17,10 +17,7 @@ class OnboardingFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_onboarding, container, false)
         val imageRes = requireArguments().getInt(ARG_IMAGE)
         val imageView = view.findViewById<ImageView>(R.id.onboarding_image)
-
         imageView.setImageResource(imageRes)
-
-        // Animasi smooth fade in dan scale untuk ilustrasi
         animateIllustration(imageView)
 
         return view

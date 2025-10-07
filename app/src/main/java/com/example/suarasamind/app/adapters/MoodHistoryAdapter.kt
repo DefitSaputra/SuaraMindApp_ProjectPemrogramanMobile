@@ -17,7 +17,6 @@ import java.util.*
 
 class MoodHistoryAdapter : ListAdapter<MoodEntry, MoodHistoryAdapter.ViewHolder>(DiffCallback()) {
 
-    // Data class untuk menampung properti visual mood
     private data class MoodVisuals(
         val name: String,
         @DrawableRes val icon: Int,
@@ -25,7 +24,6 @@ class MoodHistoryAdapter : ListAdapter<MoodEntry, MoodHistoryAdapter.ViewHolder>
         val message: String
     )
 
-    // Helper untuk mendapatkan visual berdasarkan tipe mood
     private fun getMoodVisuals(moodType: String): MoodVisuals {
         return when (moodType) {
             "happy" -> MoodVisuals("Senang", R.drawable.emo_happy, R.color.mood_happy_bg, "Hari yang menyenangkan! 🎉")

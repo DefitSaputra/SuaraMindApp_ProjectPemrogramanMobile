@@ -6,11 +6,10 @@ import java.util.Calendar
 
 data class MoodEntry(
     var id: String = "",
-    val type: String = "", // "happy", "sad", "flat", "angry"
+    val type: String = "",
     val timestamp: Date? = Date(),
     val message: String = ""
 ) {
-    // Helper function untuk mendapatkan tanggal tanpa waktu
     fun getDateOnly(): Date {
         val calendar = Calendar.getInstance()
         calendar.time = timestamp ?: Date()

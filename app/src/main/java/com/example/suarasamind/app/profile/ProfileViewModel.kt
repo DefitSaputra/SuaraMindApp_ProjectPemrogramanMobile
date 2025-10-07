@@ -25,9 +25,6 @@ class ProfileViewModel : ViewModel() {
     private val _moodCount = MutableLiveData<Int>()
     val moodCount: LiveData<Int> = _moodCount
 
-    // --- DIHAPUS ---
-    // private val _uploadStatus = MutableLiveData<String>()
-    // val uploadStatus: LiveData<String> = _uploadStatus
 
     private var userListener: ListenerRegistration? = null
     private var journalListener: ListenerRegistration? = null
@@ -57,7 +54,6 @@ class ProfileViewModel : ViewModel() {
             }
     }
 
-    // --- FUNGSI BARU ---
     fun updateAvatar(avatarId: String) {
         if (currentUserId.isEmpty()) return
         firestore.collection("users").document(currentUserId)
@@ -70,17 +66,12 @@ class ProfileViewModel : ViewModel() {
             }
     }
 
-    // --- FUNGSI TERKAIT STORAGE DIHAPUS ---
-    // fun uploadProfileImage(imageUri: Uri) { ... }
-    // private fun updateProfileImageUrl(imageUrl: String) { ... }
-
     fun updateUserName(newName: String) {
         if (currentUserId.isEmpty() || newName.isBlank()) return
         firestore.collection("users").document(currentUserId)
             .update("fullName", newName)
             .addOnFailureListener { e -> Log.w("ProfileViewModel", "Error updating name", e) }
     }
-
     fun logout() {
         auth.signOut()
     }

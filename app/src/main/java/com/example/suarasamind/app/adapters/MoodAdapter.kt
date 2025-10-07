@@ -15,13 +15,9 @@ class MoodAdapter(private val moodList: List<MoodData>) :
     RecyclerView.Adapter<MoodAdapter.MoodViewHolder>() {
 
     private var selectedPosition = -1
-    private var isEnabled = true  // ✅ Tambahan untuk mengatur status aktif/tidak
+    private var isEnabled = true
     var onItemClick: ((MoodData) -> Unit)? = null
 
-    /**
-     * Fungsi publik untuk mengatur status aktif/tidak
-     * Ketika disabled: klik tidak berfungsi dan item jadi agak transparan
-     */
     fun setEnabled(enabled: Boolean) {
         isEnabled = enabled
         notifyDataSetChanged()

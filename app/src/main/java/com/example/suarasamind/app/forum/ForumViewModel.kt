@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.suarasamind.app.data.ForumPost // Pastikan lokasi data class ini benar
+import com.example.suarasamind.app.data.ForumPost
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -53,19 +53,15 @@ class ForumViewModel : ViewModel() {
 
         val postRef = firestore.collection("posts").document(post.id)
 
-        // Cek apakah user sudah support atau belum
         if (post.supporters.contains(currentUserId)) {
-            // Jika sudah, hapus support (unlike)
             postRef.update("supporters", FieldValue.arrayRemove(currentUserId))
         } else {
-            // Jika belum, tambahkan support (like)
             postRef.update("supporters", FieldValue.arrayUnion(currentUserId))
         }
     }
 
     override fun onCleared() {
         super.onCleared()
-        // Hentikan listener saat ViewModel dihancurkan untuk menghindari memory leak
         postsListener?.remove()
     }
 }

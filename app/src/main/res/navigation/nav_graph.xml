@@ -2,21 +2,31 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android.id="@+id/nav_graph"
+    android:id="@+id/nav_graph"
     app:startDestination="@id/homeFragment">
 
-    <!-- Home Fragment -->
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.suarasamind.app.home.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_homeFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment" />
+
         <action
             android:id="@+id/action_homeFragment_to_forumFragment"
             app:destination="@id/forumFragment" />
     </fragment>
 
-    <!-- Forum Fragment -->
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.example.suarasamind.app.notification.NotificationFragment"
+        android:label="NotificationFragment"
+        tools:layout="@layout/fragment_notification"/>
+
+
     <fragment
         android:id="@+id/forumFragment"
         android:name="com.example.suarasamind.app.forum.ForumFragment"
@@ -27,7 +37,6 @@
             app:destination="@id/homeFragment" />
     </fragment>
 
-    <!-- Journal Fragment -->
     <fragment
         android:id="@+id/journalFragment"
         android:name="com.example.suarasamind.app.journal.JournalFragment"
@@ -38,7 +47,6 @@
             app:destination="@id/homeFragment" />
     </fragment>
 
-    <!-- Profile Fragment -->
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.suarasamind.app.profile.ProfileFragment"
@@ -50,4 +58,3 @@
     </fragment>
 
 </navigation>
-

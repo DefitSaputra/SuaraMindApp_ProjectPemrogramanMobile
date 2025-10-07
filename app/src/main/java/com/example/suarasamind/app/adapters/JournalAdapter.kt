@@ -12,14 +12,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-// PERUBAHAN 1: Menggunakan ListAdapter, tidak lagi perlu `private val journalList` di constructor
 class JournalAdapter : ListAdapter<JournalEntry, JournalAdapter.ViewHolder>(JournalDiffCallback()) {
 
     var onItemClick: ((JournalEntry) -> Unit)? = null
-
-    // companion object untuk menyimpan formatter agar tidak dibuat berulang kali
     companion object {
-        // PERUBAHAN 2: Optimasi SimpleDateFormat
         private val dayOfWeekFormat = SimpleDateFormat("EEEE", Locale("id", "ID"))
         private val dayFormat = SimpleDateFormat("dd", Locale.getDefault())
         private val monthYearFormat = SimpleDateFormat("MMM yyyy", Locale("id", "ID"))
@@ -30,7 +26,6 @@ class JournalAdapter : ListAdapter<JournalEntry, JournalAdapter.ViewHolder>(Jour
 
         init {
             itemView.setOnClickListener {
-                // Gunakan getItem(adapterPosition) untuk mendapatkan item yang benar
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     onItemClick?.invoke(getItem(adapterPosition))
                 }
@@ -49,7 +44,6 @@ class JournalAdapter : ListAdapter<JournalEntry, JournalAdapter.ViewHolder>(Jour
             }
             binding.ivMoodIndicator.setImageResource(moodIcon)
 
-            // Gunakan formatter yang sudah dibuat di companion object
             entry.timestamp?.let { date ->
                 binding.tvDayOfWeek.text = dayOfWeekFormat.format(date).uppercase()
                 binding.tvDay.text = dayFormat.format(date)
@@ -68,19 +62,14 @@ class JournalAdapter : ListAdapter<JournalEntry, JournalAdapter.ViewHolder>(Jour
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // Gunakan getItem(position) untuk mendapatkan data
         holder.bind(getItem(position))
     }
-
-    // Kelas DiffUtil untuk memberitahu ListAdapter cara membandingkan item
     class JournalDiffCallback : DiffUtil.ItemCallback<JournalEntry>() {
         override fun areItemsTheSame(oldItem: JournalEntry, newItem: JournalEntry): Boolean {
-            // Bandingkan berdasarkan ID unik
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: JournalEntry, newItem: JournalEntry): Boolean {
-            // Bandingkan isi datanya, data class otomatis membuat method equals() yang cocok untuk ini
             return oldItem == newItem
         }
     }

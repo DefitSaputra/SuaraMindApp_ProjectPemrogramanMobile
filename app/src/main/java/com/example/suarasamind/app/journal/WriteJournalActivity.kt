@@ -64,13 +64,10 @@ class WriteJournalActivity : BaseActivity<ActivityWriteJournalBinding>() {
     }
 
     private fun setupMoodSelectors() {
-        // Set click listener untuk ImageView mood
         binding.moodHappy.setOnClickListener { selectMood(it, "happy") }
         binding.moodFlat.setOnClickListener { selectMood(it, "flat") }
         binding.moodSad.setOnClickListener { selectMood(it, "sad") }
         binding.moodAngry.setOnClickListener { selectMood(it, "angry") }
-
-        // Set click listener untuk parent card juga agar lebih mudah diklik
         binding.moodHappy.parent?.let { parent ->
             if (parent is View) {
                 parent.setOnClickListener { selectMood(binding.moodHappy, "happy") }
@@ -94,13 +91,8 @@ class WriteJournalActivity : BaseActivity<ActivityWriteJournalBinding>() {
     }
 
     private fun selectMood(selectedView: View, mood: String) {
-        // Reset semua mood ImageView ke state tidak terpilih
         resetAllMoodViews()
-
-        // Set mood yang dipilih dengan opacity penuh
         selectedView.alpha = 1.0f
-
-        // Set parent card juga ke opacity penuh untuk visual feedback yang lebih baik
         selectedView.parent?.let { parent ->
             if (parent is ViewGroup) {
                 parent.alpha = 1.0f
@@ -111,13 +103,11 @@ class WriteJournalActivity : BaseActivity<ActivityWriteJournalBinding>() {
     }
 
     private fun resetAllMoodViews() {
-        // Reset opacity untuk semua ImageView mood
         binding.moodHappy.alpha = 0.5f
         binding.moodFlat.alpha = 0.5f
         binding.moodSad.alpha = 0.5f
         binding.moodAngry.alpha = 0.5f
 
-        // Reset opacity untuk semua parent cards
         (binding.moodHappy.parent as? ViewGroup)?.alpha = 0.5f
         (binding.moodFlat.parent as? ViewGroup)?.alpha = 0.5f
         (binding.moodSad.parent as? ViewGroup)?.alpha = 0.5f
@@ -154,7 +144,6 @@ class WriteJournalActivity : BaseActivity<ActivityWriteJournalBinding>() {
                     Toast.makeText(this, "Gagal memperbarui: ${e.message}", Toast.LENGTH_LONG).show()
                 }
         } else {
-            // Mode BUAT BARU: Tambah jurnal baru
             firestore.collection("users").document(userId)
                 .collection("journals").add(entry)
                 .addOnSuccessListener {

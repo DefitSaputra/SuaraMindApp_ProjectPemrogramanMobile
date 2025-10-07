@@ -23,14 +23,12 @@ class ForumAdapter(private var postList: MutableList<ForumPost>, private val cur
     inner class ViewHolder(private val binding: ItemForumPostFullBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             itemView.setOnClickListener {
-                // PERUBAHAN: Mengganti adapterPosition menjadi bindingAdapterPosition
                 val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     onItemClick?.invoke(postList[position])
                 }
             }
             binding.btnSupport.setOnClickListener {
-                // PERUBAHAN: Mengganti adapterPosition menjadi bindingAdapterPosition
                 val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     onSupportClick?.invoke(postList[position])

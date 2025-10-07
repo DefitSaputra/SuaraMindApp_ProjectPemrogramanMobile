@@ -36,7 +36,6 @@ class MoodHistoryViewModel : ViewModel() {
 
     fun loadMoodHistory(year: Int, month: Int) {
         if (currentUserId.isEmpty()) {
-            // Handle case where user is not logged in, maybe show empty state
             _calendarDays.value = emptyList()
             _selectedDateMoods.value = emptyList()
             return
@@ -81,7 +80,6 @@ class MoodHistoryViewModel : ViewModel() {
         val calendar = Calendar.getInstance().apply { set(currentYear, currentMonth, 1) }
 
         val daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
-        // DAY_OF_WEEK: 1 (Minggu) to 7 (Sabtu). -1 agar paddingnya benar (0-6)
         val firstDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1
 
         for (i in 0 until firstDayOfWeek) {

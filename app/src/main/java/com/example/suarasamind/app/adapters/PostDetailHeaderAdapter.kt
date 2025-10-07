@@ -41,7 +41,6 @@ class PostDetailHeaderAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         init {
-            // Set listener untuk tombol support di sini
             binding.btnSupport.setOnClickListener {
                 onSupportClick?.invoke()
             }
@@ -49,14 +48,9 @@ class PostDetailHeaderAdapter(
 
         fun bind(post: ForumPost) {
             binding.tvPostTitle.text = post.title
-            // PERUBAHAN: Menambahkan "oleh " untuk konsistensi
             binding.tvPostAuthor.text = "oleh ${post.authorUsername}"
             binding.tvPostContent.text = post.content
-
-            // PERUBAHAN: Menggabungkan jumlah dukungan ke dalam tombol
             binding.btnSupport.text = "${post.supportCount} Dukung"
-
-            // PERUBAHAN: Menambahkan " Komentar" untuk konsistensi
             binding.tvCommentCount.text = "${post.commentCount} Komentar"
 
             post.timestamp?.let { timestamp ->

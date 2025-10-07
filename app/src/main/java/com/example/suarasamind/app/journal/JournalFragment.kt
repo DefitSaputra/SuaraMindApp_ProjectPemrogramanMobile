@@ -40,14 +40,12 @@ class JournalFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        // PERUBAHAN 1: Inisialisasi adapter baru tanpa mengirim list
         journalAdapter = JournalAdapter()
         binding.rvJournalEntries.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = journalAdapter
         }
 
-        // PERUBAHAN 2: Set click listener SEKALI SAJA di sini, bukan di dalam observer
         journalAdapter.onItemClick = { journalEntry ->
             val intent = Intent(requireActivity(), JournalDetailActivity::class.java)
             intent.putExtra("JOURNAL_ID", journalEntry.id)
@@ -57,8 +55,6 @@ class JournalFragment : Fragment() {
 
     private fun observeViewModel() {
         journalViewModel.journalEntries.observe(viewLifecycleOwner) { entryList ->
-            // PERUBAHAN 3: Gunakan submitList untuk mengirim data baru ke adapter.
-            // Ini jauh lebih efisien dan akan menangani animasi secara otomatis.
             journalAdapter.submitList(entryList)
         }
     }

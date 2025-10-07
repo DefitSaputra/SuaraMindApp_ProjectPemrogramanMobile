@@ -21,11 +21,8 @@ class CreatePostActivity : BaseActivity<ActivityCreatePostBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         firestore = FirebaseFirestore.getInstance()
-
         fetchCurrentUser()
         setupListeners()
-
-        // Atur tampilan awal UI untuk switch saat activity pertama kali dibuat
         updateAnonymousUI(binding.switchAnonymous.isChecked)
     }
 
@@ -40,7 +37,6 @@ class CreatePostActivity : BaseActivity<ActivityCreatePostBinding>() {
             finish()
         }
 
-        // PERUBAHAN: Tambahkan listener untuk mendeteksi perubahan pada switch
         binding.switchAnonymous.setOnCheckedChangeListener { _, isChecked ->
             updateAnonymousUI(isChecked)
         }
@@ -49,12 +45,10 @@ class CreatePostActivity : BaseActivity<ActivityCreatePostBinding>() {
     // FUNGSI BARU: Untuk mengupdate UI berdasarkan status switch
     private fun updateAnonymousUI(isAnonymous: Boolean) {
         if (isAnonymous) {
-            // Saat mode Anonim AKTIF
             binding.tvAnonymousStatus.text = "Mode anonim: AKTIF"
             binding.cardAnonymous.strokeColor = ContextCompat.getColor(this, R.color.calm_blue)
             binding.ivAnonymousIcon.setColorFilter(ContextCompat.getColor(this, R.color.calm_blue))
         } else {
-            // Saat mode Anonim NONAKTIF
             binding.tvAnonymousStatus.text = "Identitas sebagai ${currentUsername} akan ditampilkan"
             binding.cardAnonymous.strokeColor = ContextCompat.getColor(this, R.color.text_super_light)
             binding.ivAnonymousIcon.setColorFilter(ContextCompat.getColor(this, R.color.text_light))
@@ -68,8 +62,6 @@ class CreatePostActivity : BaseActivity<ActivityCreatePostBinding>() {
                 .addOnSuccessListener { document ->
                     if (document != null && document.exists()) {
                         currentUsername = document.getString("username") ?: "Pengguna"
-                        // Setelah username didapat, update UI lagi untuk menampilkan nama pengguna
-                        // jika mode anonim sedang nonaktif.
                         updateAnonymousUI(binding.switchAnonymous.isChecked)
                     }
                 }

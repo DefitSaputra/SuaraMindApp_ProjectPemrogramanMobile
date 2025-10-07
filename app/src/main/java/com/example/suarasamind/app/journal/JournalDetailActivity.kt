@@ -50,8 +50,6 @@ class JournalDetailActivity : BaseActivity<ActivityJournalDetailBinding>() {
     }
 
     private fun loadJournalEntry() {
-        // Menggunakan addSnapshotListener agar jika ada perubahan (dari halaman edit),
-        // halaman detail ini akan otomatis refresh saat dibuka kembali.
         firestore.collection("users").document(userId)
             .collection("journals").document(journalId)
             .addSnapshotListener { document, error ->
@@ -63,7 +61,6 @@ class JournalDetailActivity : BaseActivity<ActivityJournalDetailBinding>() {
                     val entry = document.toObject<JournalEntry>()
                     entry?.let { displayJournal(it) }
                 } else {
-                    // Dokumen mungkin sudah dihapus
                     Toast.makeText(this, "Jurnal ini mungkin telah dihapus.", Toast.LENGTH_SHORT).show()
                     finish()
                 }
@@ -96,14 +93,12 @@ class JournalDetailActivity : BaseActivity<ActivityJournalDetailBinding>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_edit -> {
-                // Buka WriteJournalActivity dengan membawa ID jurnal untuk mode edit
                 val intent = Intent(this, WriteJournalActivity::class.java)
                 intent.putExtra("JOURNAL_ID", journalId)
                 startActivity(intent)
                 true
             }
             R.id.action_delete -> {
-                // Tampilkan dialog konfirmasi sebelum menghapus
                 showDeleteConfirmationDialog()
                 true
             }
@@ -111,7 +106,6 @@ class JournalDetailActivity : BaseActivity<ActivityJournalDetailBinding>() {
         }
     }
 
-    // FUNGSI BARU: Menampilkan dialog konfirmasi hapus
     private fun showDeleteConfirmationDialog() {
         AlertDialog.Builder(this)
             .setTitle("Hapus Jurnal")
@@ -124,14 +118,13 @@ class JournalDetailActivity : BaseActivity<ActivityJournalDetailBinding>() {
             .show()
     }
 
-    // FUNGSI BARU: Menghapus data dari Firestore
     private fun deleteJournalEntry() {
         firestore.collection("users").document(userId)
             .collection("journals").document(journalId)
             .delete()
             .addOnSuccessListener {
                 Toast.makeText(this, "Jurnal berhasil dihapus", Toast.LENGTH_SHORT).show()
-                finish() // Tutup halaman detail dan kembali ke daftar
+                finish()
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Gagal menghapus jurnal: ${e.message}", Toast.LENGTH_LONG).show()

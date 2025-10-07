@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  PENYESUAIAN DI SINI:
-  Menambahkan 'android:fitsSystemWindows="true"' ke root layout.
-  Ini adalah kunci agar layout merespons saat keyboard muncul.
--->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
