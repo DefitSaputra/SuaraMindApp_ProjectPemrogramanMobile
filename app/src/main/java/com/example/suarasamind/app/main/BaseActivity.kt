@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
 
-    protected lateinit var binding: VB
+    lateinit var binding: VB
     protected lateinit var firebaseAuth: FirebaseAuth
     protected lateinit var navController: NavController
 

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +19,7 @@ import com.example.suarasamind.app.adapters.MoodAdapter
 import com.example.suarasamind.app.auth.LoginActivity
 import com.example.suarasamind.app.data.MoodData
 import com.example.suarasamind.app.databinding.FragmentHomeBinding
+import com.example.suarasamind.app.main.MainActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
@@ -45,8 +47,8 @@ class HomeFragment : Fragment() {
         setupUI()
         observeViewModel()
 
-        binding.ivMenu.setOnClickListener { anchorView ->
-            showLogoutMenu(anchorView)
+        binding.ivMenu.setOnClickListener {
+            (activity as? MainActivity)?.binding?.drawerLayout?.openDrawer(GravityCompat.START)
         }
     }
 
