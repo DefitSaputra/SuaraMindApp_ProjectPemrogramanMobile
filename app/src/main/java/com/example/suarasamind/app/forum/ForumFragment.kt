@@ -31,8 +31,7 @@ class ForumFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setupUI()
+        setupAdapter()
         observeViewModel()
 
         binding.fabCreatePost.setOnClickListener {
@@ -41,29 +40,31 @@ class ForumFragment : Fragment() {
         }
     }
 
-    private fun setupUI() {
+    private fun setupAdapter() {
         val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-        forumAdapter = ForumAdapter(mutableListOf(), currentUserId)
+
+        forumAdapter = ForumAdapter(
+            currentUserId = currentUserId,
+            onSupportClick = { post ->
+                forumViewModel.toggleSupport(post)
+            },
+            onItemClick = { post ->
+                val intent = Intent(requireActivity(), PostDetailActivity::class.java)
+                intent.putExtra("POST_ID", post.id)
+                startActivity(intent)
+            }
+        )
 
         binding.rvForumPosts.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = forumAdapter
         }
-
-        forumAdapter.onItemClick = { post ->
-            val intent = Intent(requireActivity(), PostDetailActivity::class.java)
-            intent.putExtra("POST_ID", post.id)
-            startActivity(intent)
-        }
-
-        forumAdapter.onSupportClick = { post ->
-            forumViewModel.toggleSupport(post)
-        }
     }
 
     private fun observeViewModel() {
         forumViewModel.posts.observe(viewLifecycleOwner) { postList ->
-            forumAdapter.updatePosts(postList)
+            // [DIUBAH] Menggunakan submitList yang lebih efisien
+            forumAdapter.submitList(postList)
         }
     }
 

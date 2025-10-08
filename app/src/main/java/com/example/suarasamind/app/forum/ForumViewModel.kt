@@ -29,7 +29,6 @@ class ForumViewModel : ViewModel() {
 
     private fun listenToAllPosts() {
         postsListener?.remove()
-
         postsListener = firestore.collection("posts")
             .orderBy("timestamp", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshots, error ->
@@ -48,15 +47,26 @@ class ForumViewModel : ViewModel() {
             }
     }
 
+    // [DIUBAH] Menggunakan transaction untuk update supportCount & supporters
     fun toggleSupport(post: ForumPost) {
         if (currentUserId.isEmpty()) return
 
         val postRef = firestore.collection("posts").document(post.id)
 
-        if (post.supporters.contains(currentUserId)) {
-            postRef.update("supporters", FieldValue.arrayRemove(currentUserId))
-        } else {
-            postRef.update("supporters", FieldValue.arrayUnion(currentUserId))
+        firestore.runTransaction { transaction ->
+            val snapshot = transaction.get(postRef)
+            val currentSupporters = snapshot.get("supporters") as? List<String> ?: emptyList()
+
+            if (currentSupporters.contains(currentUserId)) {
+                transaction.update(postRef, "supportCount", FieldValue.increment(-1))
+                transaction.update(postRef, "supporters", FieldValue.arrayRemove(currentUserId))
+            } else {
+                // Jika belum ada, tambahkan dukungan (like)
+                transaction.update(postRef, "supportCount", FieldValue.increment(1))
+                transaction.update(postRef, "supporters", FieldValue.arrayUnion(currentUserId))
+            }
+        }.addOnFailureListener { e ->
+            Log.w("ForumViewModel", "Error toggling support", e)
         }
     }
 

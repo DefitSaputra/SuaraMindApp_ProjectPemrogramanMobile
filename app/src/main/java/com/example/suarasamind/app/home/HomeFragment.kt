@@ -56,7 +56,18 @@ class HomeFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
         val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-        forumAdapter = ForumAdapter(mutableListOf(), currentUserId)
+
+        // 🔹 Inisialisasi ForumAdapter dengan listener langsung
+        forumAdapter = ForumAdapter(
+            currentUserId = currentUserId,
+            onSupportClick = { post ->
+                homeViewModel.toggleSupport(post)
+            },
+            onItemClick = {
+                navigateToBottomNavItem(R.id.forumFragment)
+            }
+        )
+
         binding.rvForum.layoutManager = LinearLayoutManager(requireContext())
         binding.rvForum.isNestedScrollingEnabled = false
         binding.rvForum.adapter = forumAdapter
@@ -76,7 +87,7 @@ class HomeFragment : Fragment() {
             showDatePickerDialog()
         }
 
-        // 🔹 Notifikasi placeholder
+        // 🔹 Notifikasi
         binding.ivNotification.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_notificationFragment)
         }
@@ -84,15 +95,6 @@ class HomeFragment : Fragment() {
         // 🔹 Lihat semua Forum
         binding.btnSeeAllForum.setOnClickListener {
             navigateToBottomNavItem(R.id.forumFragment)
-        }
-
-        // 🔹 Event Forum
-        forumAdapter.onItemClick = {
-            navigateToBottomNavItem(R.id.forumFragment)
-        }
-
-        forumAdapter.onSupportClick = { post ->
-            homeViewModel.toggleSupport(post)
         }
     }
 
@@ -104,6 +106,7 @@ class HomeFragment : Fragment() {
         homeViewModel.articles.observe(viewLifecycleOwner) { articles ->
             val contentAdapter = ContentAdapter(articles)
             binding.rvArticles.adapter = contentAdapter
+
             contentAdapter.onItemClick = { article ->
                 if (article.articleUrl.isNotEmpty()) {
                     try {
@@ -118,8 +121,9 @@ class HomeFragment : Fragment() {
             }
         }
 
+        // 🔹 Gunakan submitList alih-alih updatePosts
         homeViewModel.forumPosts.observe(viewLifecycleOwner) { posts ->
-            forumAdapter.updatePosts(posts)
+            forumAdapter.submitList(posts)
         }
 
         homeViewModel.hasMoodToday.observe(viewLifecycleOwner) { hasMood ->
@@ -161,7 +165,7 @@ class HomeFragment : Fragment() {
 
         val datePickerDialog = DatePickerDialog(
             requireContext(),
-            { _, _, _, _ ->  },
+            { _, _, _, _ -> },
             year, month, day
         )
         datePickerDialog.setButton(DatePickerDialog.BUTTON_POSITIVE, "Tutup") { dialog, _ ->
