@@ -37,11 +37,16 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- Drawer Navigation -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:background="@color/calm_blue_light"
+        app:itemIconTint="@color/menu_item_color"
+        app:itemTextColor="@color/menu_item_color"
+        app:itemBackground="@drawable/menu_item_background"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/drawer_menu" />
 
